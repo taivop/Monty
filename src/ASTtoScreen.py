@@ -17,7 +17,7 @@ pygame.init()
 screen = pygame.display.set_mode( (1000, 600) )
 pygame.display.set_caption("AST overview display")
 screen.fill( (126,206,214) )
-myfont = pygame.font.SysFont("Consolas", 20)
+myfont = pygame.font.SysFont("Courier New", 20)
 
 # for each element in the main body (roughly every line in the program)
 for i in range(0,len(b)):
