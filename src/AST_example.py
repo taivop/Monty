@@ -28,4 +28,7 @@ ast.fix_missing_locations(puu)
 # Muudetud puud võin jälle kompileerida ja käivitada
 exec(compile(puu, "<katsetus>", "exec"))
 
+print(type(laused[0]))
+print(type(laused[1]))
+print(type(laused[2]))
 
