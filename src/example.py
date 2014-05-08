@@ -1,19 +1,19 @@
 import ast
+import astpp
 
 # Example provided in the course
 programm = """
 x = 3
-y = "tere".upper()
-print(x * y)
+y = 4
+x+y
 """
 
 # parsime programmi abstraktseks süntaksipuuks:
 puu = ast.parse(programm)
-print("Programmi AST:", ast.dump(puu))
+print("Programmi AST:\n", astpp.dump(puu))
 
 # AST-i saab kompileerida ja seejärel käivitada
 exec(compile(puu, "<katsetus>", "exec"))
-
 
 # Ma võin teha puus mingi muudatuse,
 # nt. muudan ära esimese omistuslause parema poole
@@ -27,4 +27,5 @@ ast.fix_missing_locations(puu)
 
 # Muudetud puud võin jälle kompileerida ja käivitada
 exec(compile(puu, "<katsetus>", "exec"))
+
 
