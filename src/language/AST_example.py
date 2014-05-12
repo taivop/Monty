@@ -1,7 +1,8 @@
 import ast
-import astpp
 
 # Example provided in the course
+from language import astpp
+
 programm = """
 x = 3
 y = 4

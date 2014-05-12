@@ -1,6 +1,9 @@
 import ast
-import astpp
+
 import pygame
+
+from language import astpp
+
 
 program = """
 x = 3
