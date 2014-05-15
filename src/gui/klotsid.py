@@ -8,7 +8,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.size=size
     
     def Render(self,screen):
-        blockimg = pygame.image.load("blockimg.png")
+        blockimg = pygame.image.load("../resources/blockimg.png")
         screen.blit(blockimg,(self.pos))
 
 def main(): # Where we start
