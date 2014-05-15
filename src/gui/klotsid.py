@@ -8,7 +8,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.size=size
     
     def Render(self,screen):
-        blockimg = pygame.image.load("../resources/blockimg.png")
+        blockimg = pygame.image.load("../../resources/blockimg.png")
         screen.blit(blockimg,(self.pos))
 
 class StartTriangle():
@@ -72,7 +72,7 @@ def main(): # Where we start
         if MouseReleased:
             Target=None # Drop item, if we have any
 
-        triangle=StartTriangle((0,255,0),[0,0], 40,15) # create a new one
+        triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
         RenderList.append(triangle) # add to list of things to draw
 
         for item in RenderList:
