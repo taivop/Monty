@@ -1,14 +1,22 @@
 import pygame
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
-    def __init__(self,color,pos,size): # initialize the properties of the object
+    def __init__(self,color,pos,width,height): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.color=color
         self.pos=pos
-        self.size=size
+        self.width=width
+        self.height=height
+        self.image = pygame.image.load("blockimg.png")
+        self.rect = self.image.get_rect()
+        self.rect.x , self.rect.y = pos
+        self.child = None
+
+    def hasChild(self):
+        return self.child is not None
     
     def Render(self,screen):
-        blockimg = pygame.image.load("../../resources/blockimg.png")
+        blockimg = pygame.image.load("blockimg.png")
         screen.blit(blockimg,(self.pos))
 
 class StartTriangle():
@@ -26,16 +34,33 @@ class StartTriangle():
         point_bottom = [self.x + self.width / 2, self.y + self.height]
         points = [point_top_left, point_top_right,point_bottom]
         pygame.draw.polygon(screen, self.color, points, 0)
+def connectBlocks(blockone, blocktwo):
+    if blockone.pos[1]<blocktwo.pos[1]:
+        upperblock = blockone
+        bottomblock = blocktwo
+    else:
+        upperblock = blocktwo
+        bottomblock = blockone
+        
+    upperblock.child = bottomblock
+    
+    bottomblock.pos=upperblock.pos[0], upperblock.pos[1]+42
+    bottomblock.rect.x, bottomblock.rect.y = bottomblock.pos
 
+    print("connected blocks")
 
+def disconnectBlocks(parent, child):
+    parent.child = None
+    print("disconnected blocks")
+    
 def main(): # Where we start
-    screen=pygame.display.set_mode((600,400))
+    screen=pygame.display.set_mode((600,600))
     running=True
-    RenderList=[] # list of objects
     MousePressed=False # Pressed down THIS FRAME
     MouseDown=False # mouse is held down
     MouseReleased=False # Released THIS FRAME
     Target=None # target of Drag/Drop
+    block_group = pygame.sprite.Group()
     while running:
         screen.fill((0,0,0)) # clear screen
         pos=pygame.mouse.get_pos()
@@ -53,24 +78,33 @@ def main(): # Where we start
                 MouseDown=False
              
         if MousePressed==True:
-            for item in RenderList: # search all items
-                #print(item.__class__.__name__)
-                if item.__class__.__name__ == 'Block':
-                    if (pos[0]>=(item.pos[0]-item.size) and
-                        pos[0]<=(item.pos[0]+item.size) and
-                        pos[1]>=(item.pos[1]-item.size) and
-                        pos[1]<=(item.pos[1]+item.size) ): # inside the bounding box
-                        Target=item # "pick up" item
+            for item in block_group: # search all items
+                if (pos[0]>=(item.pos[0]-item.width) and 
+                    pos[0]<=(item.pos[0]+item.width) and 
+                    pos[1]>=(item.pos[1]-item.height) and 
+                    pos[1]<=(item.pos[1]+item.height) ): # inside the bounding box
+                    Target=item # "pick up" item
             
             if Target is None: # didn't find any?
-                Target=Block((0,0,255),pos,50) # create a new one
-                RenderList.append(Target) # add to list of things to draw
-            
+                Target=Block((0,0,255),pos,200,40)
+                block_group.add(Target) # create a new one
+                
         if MouseDown and Target is not None: # if we are dragging something
-            Target.pos=pos # move the target with us
-        
+            Target.pos=pos
+            Target.rect.x, Target.rect.y = pos# move the target with us
+
         if MouseReleased:
             Target=None # Drop item, if we have any
+            for item in block_group:
+                for item2 in block_group:
+                    if item.child == item2 and not pygame.sprite.collide_rect(item,item2):
+                        disconnectBlocks(item,item2)
+            
+        for item in block_group:
+            item.Render(screen) # Draw all items'
+            for item2 in block_group:
+                if item != item2 and pygame.sprite.collide_rect(item,item2):
+                    connectBlocks(item,item2) ### this gets repeated, yet it keeps the blocks together
 
         triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
         RenderList.append(triangle) # add to list of things to draw
