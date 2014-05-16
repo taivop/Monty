@@ -1,4 +1,5 @@
 import pygame
+import os
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
     def __init__(self,color,pos,width,height): # initialze the properties of the object
@@ -7,11 +8,11 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.pos=pos
         self.width=width
         self.height=height
-        self.image = pygame.image.load("blockimg.png")
+        self.image = pygame.image.load((os.path.sep).join(os.getcwd().split(os.path.sep)[:-2])+os.path.sep+"resources"+os.path.sep+"blockimg.png")
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = pos
         self.child = None
-
+        
     def hasChild(self):
         return self.child is not None
     
@@ -19,14 +20,17 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         blockimg = pygame.image.load("blockimg.png")
         screen.blit(blockimg,(self.pos))
 
-class StartTriangle():
+class StartTriangle(pygame.sprite.Sprite):
     def __init__(self,color,top_left_pos,width,height):
         pygame.sprite.Sprite.__init__(self)
         self.color = color
         self.x = top_left_pos[0]
         self.y = top_left_pos[1]
+        self.pos = top_left_pos
         self.height = height
         self.width = width
+        self.rect = pygame.Rect(top_left_pos[0], top_left_pos[1], width, height)
+        self.child = None
 
     def Render(self,screen):
         point_top_left = [self.x, self.y]
@@ -34,6 +38,7 @@ class StartTriangle():
         point_bottom = [self.x + self.width / 2, self.y + self.height]
         points = [point_top_left, point_top_right,point_bottom]
         pygame.draw.polygon(screen, self.color, points, 0)
+        
 def connectBlocks(blockone, blocktwo):
     if blockone.pos[1]<blocktwo.pos[1]:
         upperblock = blockone
@@ -44,7 +49,13 @@ def connectBlocks(blockone, blocktwo):
         
     upperblock.child = bottomblock
     
-    bottomblock.pos=upperblock.pos[0], upperblock.pos[1]+42
+    if isinstance(upperblock,Block):
+        bottomblock.pos=upperblock.pos[0], upperblock.pos[1]+42
+    else:
+        print(bottomblock.pos)
+        print(upperblock.pos)
+        bottomblock.pos=0, upperblock.pos[1]+upperblock.height-5
+        
     bottomblock.rect.x, bottomblock.rect.y = bottomblock.pos
 
     print("connected blocks")
@@ -52,7 +63,7 @@ def connectBlocks(blockone, blocktwo):
 def disconnectBlocks(parent, child):
     parent.child = None
     print("disconnected blocks")
-    
+
 def main(): # Where we start
     screen=pygame.display.set_mode((600,600))
     running=True
@@ -61,6 +72,10 @@ def main(): # Where we start
     MouseReleased=False # Released THIS FRAME
     Target=None # target of Drag/Drop
     block_group = pygame.sprite.Group()
+
+    triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
+    block_group.add(triangle) # add to list of things to draw
+    
     while running:
         screen.fill((0,0,0)) # clear screen
         pos=pygame.mouse.get_pos()
@@ -100,16 +115,13 @@ def main(): # Where we start
                     if item.child == item2 and not pygame.sprite.collide_rect(item,item2):
                         disconnectBlocks(item,item2)
             
+            for item in block_group:
+                item.Render(screen) # Draw all items'
+                for item2 in block_group:
+                    if item != item2 and pygame.sprite.collide_rect(item,item2) and item.child!=item2 and item2.child!=item:
+                        connectBlocks(item,item2)
+
         for item in block_group:
-            item.Render(screen) # Draw all items'
-            for item2 in block_group:
-                if item != item2 and pygame.sprite.collide_rect(item,item2):
-                    connectBlocks(item,item2) ### this gets repeated, yet it keeps the blocks together
-
-        triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
-        RenderList.append(triangle) # add to list of things to draw
-
-        for item in RenderList:
             item.Render(screen) # Draw all items
             
         MousePressed=False # Reset these to False
