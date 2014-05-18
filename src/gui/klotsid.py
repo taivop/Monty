@@ -48,6 +48,7 @@ def disconnectBlocks(parent, child):
     print("disconnected blocks")
 
 def main(): # Where we start
+    pygame.init()
     screen=pygame.display.set_mode((600,600))
     running=True
     MousePressed=False # Pressed down THIS FRAME
@@ -62,7 +63,8 @@ def main(): # Where we start
     while running:
         screen.fill((0,0,0)) # clear screen
         pos=pygame.mouse.get_pos()
-        for Event in pygame.event.get():
+        events = pygame.event.get()
+        for Event in events:
             if Event.type == pygame.QUIT:
                 running=False
                 break # get out now
@@ -106,6 +108,8 @@ def main(): # Where we start
 
         for item in block_group:
             item.Render(screen) # Draw all items
+            if isinstance(item, Block):
+                item.textbox.Update(events)
             
         MousePressed=False # Reset these to False
         MouseReleased=False # Ditto        

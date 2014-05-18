@@ -1,6 +1,7 @@
 import pygame
 import os
 import ast
+from gui.eztext import Textbox
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
     def __init__(self,color,pos,width,height): # initialze the properties of the object
@@ -10,9 +11,11 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.width=width
         self.height=height
         self.image = pygame.image.load((os.path.sep).join(os.getcwd().split(os.path.sep)[:-2])+os.path.sep+"resources"+os.path.sep+"blockimg.png")
+        #self.image = pygame.image.load("blockimg.png")
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = pos
         self.child = None
+        self.textbox = Textbox()
 
     def hasChild(self):
         return self.child is not None
@@ -20,6 +23,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
     def Render(self,screen):
         blockimg = pygame.image.load("../../resources/blockimg.png")
         screen.blit(blockimg,(self.pos))
+        self.textbox.Render(screen, self.pos)
 
 class AssignBlock():
     """ Class for assignment statements, e.g. x = 4. Right now x = y + 5 type assignment not supported.

@@ -2,15 +2,19 @@
 from pygame.locals import *
 import pygame, string
 
-class TextBox():
+class Textbox():
     def __init__(self):
-        self.color = (255,255,255)
-        self.txtbx = Input(maxlength=5, color=(255,0,0), prompt='')
+        #self.color = (255,255,255)
+        self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='')
+
+
 
     def Render(self, screen, pos):
         #pygame.draw.rect(screen, color, pygame.Rect(pos, (30,100)))
-        self.txtbx.set_pos(pos[0], pos[1])
+        self.txtbx.set_pos(pos[0]+5, pos[1]+15)
         self.txtbx.draw(screen)
+        self.ristkylik1 = pygame.Rect(pos[0]+2, pos[1]+12,60,20)
+        pygame.draw.rect(screen, (0,0,0), self.ristkylik1, 3)
 
     def Update(self, event):
         self.txtbx.update(event)
