@@ -1,24 +1,6 @@
 import pygame
-import os
+from gui.blocks import Block
 
-class Block(pygame.sprite.Sprite): # Something we can create and manipulate
-    def __init__(self,color,pos,width,height): # initialze the properties of the object
-        pygame.sprite.Sprite.__init__(self)
-        self.color=color
-        self.pos=pos
-        self.width=width
-        self.height=height
-        self.image = pygame.image.load((os.path.sep).join(os.getcwd().split(os.path.sep)[:-2])+os.path.sep+"resources"+os.path.sep+"blockimg.png")
-        self.rect = self.image.get_rect()
-        self.rect.x , self.rect.y = pos
-        self.child = None
-        
-    def hasChild(self):
-        return self.child is not None
-    
-    def Render(self,screen):
-        blockimg = pygame.image.load("blockimg.png")
-        screen.blit(blockimg,(self.pos))
 
 class StartTriangle(pygame.sprite.Sprite):
     def __init__(self,color,top_left_pos,width,height):
@@ -61,6 +43,7 @@ def connectBlocks(blockone, blocktwo):
     print("connected blocks")
 
 def disconnectBlocks(parent, child):
+    # TODO: does not work this way. (PyCharm says that the value of 'child' is not used).
     parent.child = None
     print("disconnected blocks")
 
