@@ -5,8 +5,8 @@ from language import astpp
 
 programm = """
 x = 3
-y = 4
-x+y
+y = x+4
+print(x)
 """
 
 # parsime programmi abstraktseks süntaksipuuks:

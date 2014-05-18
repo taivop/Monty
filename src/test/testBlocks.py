@@ -7,7 +7,7 @@ assign_block = AssignBlock("x", 5)
 print_block = PrintBlock("x")
 
 # pretty-print the ast node of the block
-print(dump(assign_block.getAstNode()))
+#print(dump(assign_block.getAstNode()))
 
 # create an AST
 root = ast.Module()
@@ -20,5 +20,15 @@ root.body.append(print_block.getAstNode())
 # fix missing locations so Python does not complain
 root2 = ast.fix_missing_locations(root)
 
-# compile and execute the AST that we just created from scratch
+# compile and execute the AST that we just created from scratchs
 exec(compile(root, "<test>", "exec"))
+
+
+# now do the same thing with the AstHandler class
+print('now using AstHandler')
+from language.asthandler import AstHandler
+
+blocks = [assign_block, print_block]
+root = AstHandler.blocksToAst(blocks)
+exec(compile(root, "<test>", "exec"))
+
