@@ -12,7 +12,6 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.width=width
         self.height=height
         self.image = pygame.image.load((os.path.sep).join(os.getcwd().split(os.path.sep)[:-2])+os.path.sep+"resources"+os.path.sep+"blockimg.png")
-        #self.image = pygame.image.load("blockimg.png")
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = pos
         self.child = None
@@ -22,7 +21,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         return self.child is not None
 
     def Render(self,screen):
-        blockimg = pygame.image.load("../../resources/blockimg.png")
+        blockimg = self.image
         screen.blit(blockimg,(self.pos))
         self.textbox.Render(screen, self.pos)
 
