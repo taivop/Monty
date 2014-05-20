@@ -3,8 +3,12 @@ from language.astpp import dump
 import ast
 
 # Create an assignment block and a print block
-assign_block = AssignBlock("x", 5)
-print_block = PrintBlock("x")
+assign_block = AssignBlock("x", 7)
+assign_block2 = AssignBlock("y", 11)
+assign_block3 = AssignBlock("z", "x+y")
+print_block = PrintBlock("z")
+
+bloxx = [assign_block, assign_block2, assign_block3, print_block]
 
 # pretty-print the ast node of the block
 #print(dump(assign_block.getAstNode()))
@@ -14,8 +18,8 @@ root = ast.Module()
 
 # append the nodes from the block to the list of nodes
 root.body = []
-root.body.append(assign_block.getAstNode())
-root.body.append(print_block.getAstNode())
+for block in bloxx:
+    root.body.append(block.getAstNode())
 
 # fix missing locations so Python does not complain
 root2 = ast.fix_missing_locations(root)

@@ -32,3 +32,18 @@ class AstHandler():
 
         return root2
 
+    @staticmethod
+    def codeToAst(code):
+        # Make the output go to file-like string objects
+        error = None
+
+        try:
+            # Try to parse, the code to a tree
+            tree = ast.parse(code)
+
+        except Exception as e:
+            # If an exception occurred, remember it
+            error = e.__class__.__name__
+
+        return tree, error
+

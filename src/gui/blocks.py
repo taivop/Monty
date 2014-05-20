@@ -2,6 +2,7 @@ import pygame
 import os
 import ast
 from gui.eztext import Textbox
+from language.asthandler import AstHandler
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
     def __init__(self,color,pos,width,height): # initialze the properties of the object
@@ -26,20 +27,31 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.textbox.Render(screen, self.pos)
 
 class AssignBlock():
-    """ Class for assignment statements, e.g. x = 4. Right now x = y + 5 type assignment not supported.
+    """ Class for assignment statements. Tested for x = 1, y = x+5, z = x+y (and analogous assignments)
     """
     var_name = None
     value = None
+    text = None
     def __init__(self, var_name, value):
         #Block.__init__(self)
         self.var_name = var_name
         self.value = value
-        # do something
 
     def getAstNode(self):
-        node = ast.Assign()
-        node.targets = [ast.Name(id=self.var_name, ctx=ast.Store())]
-        node.value = ast.Num(n=self.value)
+        # TODO: handle error if not a legal assignment
+        # TODO: security risk if var_name or value contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+
+        return tree.body[0]
+
+    def makeText(self):
+        # create code corresponding to this block
+        self.text = "{0} = {1}".format(self.var_name, self.value)
+
+    def getText(self):
+        # get the code corresponding to this block
+        self.makeText()
+        return self.text
 
         return node
 
@@ -47,7 +59,7 @@ class AssignBlock():
 
 
 class PrintBlock():
-    """ Class for print statements, e.g. print(x). Right now supports only printing variable values.
+    """ Class for print statements, e.g. print(x). Tested for print(x), print(x+5) (and analogous prints)
     """
     expression = None
     def __init__(self, expression):
@@ -55,8 +67,21 @@ class PrintBlock():
         self.expression = expression
 
     def getAstNode(self):
-        node = ast.Expr()
-        node.value = ast.Call(func=ast.Name(id='print', ctx=ast.Load()), keywords=[], starargs=None, kwargs=None)
-        node.value.args = [ast.Name(id=self.expression, ctx=ast.Load())]
+        # TODO: handle error if not a legal print
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+
+        return tree.body[0]
+
+
+    def makeText(self):
+        # create code corresponding to this block
+        self.text = "print({0})".format(self.expression)
+
+    def getText(self):
+        # get the code corresponding to this block
+        self.makeText()
+        return self.text
+
 
         return node
