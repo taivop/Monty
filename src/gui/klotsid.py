@@ -1,7 +1,7 @@
 import pygame
 
 from gui.StartTriangle import StartTriangle
-from gui.Blocks import Block
+from gui.blocks import Block
 from gui.CodeBox import CodeBox
 
 

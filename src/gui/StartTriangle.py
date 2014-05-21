@@ -1,4 +1,5 @@
 import pygame
+from gui.DebugHelper import DebugHelper
 
 class StartTriangle(pygame.sprite.Sprite):
     def __init__(self,color,top_left_pos,width,height):
@@ -18,3 +19,4 @@ class StartTriangle(pygame.sprite.Sprite):
         point_bottom = [self.x + self.width / 2, self.y + self.height]
         points = [point_top_left, point_top_right,point_bottom]
         pygame.draw.polygon(screen, self.color, points, 0)
+        DebugHelper.drawDebugRect(self.rect, screen)

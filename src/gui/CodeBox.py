@@ -1,5 +1,5 @@
 import pygame
-
+from gui.DebugHelper import DebugHelper
 
 
 class CodeBox(pygame.sprite.Sprite):
@@ -15,7 +15,7 @@ class CodeBox(pygame.sprite.Sprite):
     left_padding = 10           # left-padding of every line of text
     line_height = 30            # height of each line of text
 
-
+    rect = pygame.Rect(x, y, width, height)
 
     font = None
     title_font = None
@@ -29,16 +29,20 @@ class CodeBox(pygame.sprite.Sprite):
 
 
     def Render(self,screen):
+
         pygame.draw.rect(screen, (255,255,255), (self.x,self.y,self.width,self.height))
+        DebugHelper.drawDebugRect(self.rect, screen)
 
         # Title line
         label_obj = self.title_font.render("Program text:", 1, (0, 0, 0))
-        screen.blit(label_obj, (self.x+self.left_padding, self.y+10))
+        blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+10))
+        DebugHelper.drawDebugRect(blit, screen)
 
         for i in range(0, len(self.lineList)):
             line = self.lineList[i]
             label_obj = self.font.render(line, 1, (0, 0, 0))
-            screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+            DebugHelper.drawDebugRect(blit, screen)
 
     def setLineList(self, lines):
         self.lineList = lines

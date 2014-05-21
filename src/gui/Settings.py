@@ -2,4 +2,4 @@
 
 
 class Settings():
-    debugging = False
+    debugging = True
