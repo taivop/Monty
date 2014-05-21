@@ -1,6 +1,6 @@
 import pygame
 import os
-import ast
+from gui.Settings import Settings
 from gui.eztext import Textbox
 from language.asthandler import AstHandler
 
@@ -22,8 +22,8 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         return self.child is not None
 
     def Render(self,screen):
-
-        pygame.draw.rect(screen, (255, 0, 0), self.rect, 3) # for debugging reasons
+        if Settings.debugging:
+            pygame.draw.rect(screen, (255, 0, 0), self.rect, 3) # for debugging reasons
 
         blockimg = self.image
         screen.blit(blockimg,(self.pos))
