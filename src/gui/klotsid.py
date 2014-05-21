@@ -1,7 +1,7 @@
 import pygame
 
 from gui.StartTriangle import StartTriangle
-from gui.blocks import Block
+from gui.Blocks import Block
 from gui.CodeBox import CodeBox
 
 
@@ -58,22 +58,22 @@ def main(): # Where we start
     
     while running:
         screen.fill((0,0,0)) # clear screen
-        pos=pygame.mouse.get_pos()
+        pos = pygame.mouse.get_pos()
         events = pygame.event.get()
         for Event in events:
             if Event.type == pygame.QUIT:
-                running=False
-                break # get out now
+                running = False
+                break  # get out now
             
             if Event.type == pygame.MOUSEBUTTONDOWN:
-                MousePressed=True 
-                MouseDown=True 
+                MousePressed = True
+                MouseDown = True
                
             if Event.type == pygame.MOUSEBUTTONUP:
-                MouseReleased=True
-                MouseDown=False
+                MouseReleased = True
+                MouseDown = False
              
-        if MousePressed==True:
+        if MousePressed == True:
             should_create_block = True              # do we want to create a new block?
 
             for item in block_group:
@@ -106,16 +106,21 @@ def main(): # Where we start
                     if item != item2 and pygame.sprite.collide_rect(item,item2) and item.child!=item2 and item2.child!=item:
                         connectBlocks(item,item2)
 
+        # RENDERING
+
         for item in block_group:
             item.Render(screen) # Draw all items
             item.textbox.Update(events)
 
         for item in other_group:
             item.Render(screen)
-            
-        MousePressed=False # Reset these to False
-        MouseReleased=False # Ditto        
+
         pygame.display.flip()
+
+        # RESETTING some values
+
+        MousePressed = False # Reset these to False
+        MouseReleased = False # Ditto
     return # End of function
     
 if __name__ == '__main__': # Are we RUNNING from this module?

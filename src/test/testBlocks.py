@@ -1,4 +1,4 @@
-from gui.blocks import *
+from gui.Blocks import *
 from language.astpp import dump
 import ast
 
