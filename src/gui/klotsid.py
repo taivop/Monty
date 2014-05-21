@@ -31,11 +31,18 @@ def disconnectBlocks(parent, child):
     print("disconnected blocks")
 
 def mouseIsOn(item, mouse_pos):
-    if (item.pos[0]-item.width) <= mouse_pos[0] <= (item.pos[0]+item.width) and\
-                            (item.pos[1]+item.height) >= mouse_pos[1] >= (item.pos[1]-item.height):
+    if (item.pos[0]) <= mouse_pos[0] <= (item.pos[0]+item.width) and\
+                            (item.pos[1]+item.height) >= mouse_pos[1] >= (item.pos[1]):
         return True
     return False
 
+def moveChildren(target, pos, i=1):
+    if target.hasChild():
+        target.child.pos=pos[0],pos[1]+target.height*i
+        target.child.rect.x=pos[0]
+        target.child.rect.y=pos[1]+target.height*i
+        i+=1
+        moveChildren(target.child, pos, i)
 
 def main(): # Where we start
     pygame.init()
@@ -92,12 +99,14 @@ def main(): # Where we start
         if MouseDown and Target is not None: # if we are dragging something
             Target.pos=pos
             Target.rect.x, Target.rect.y = pos# move the target with us
+            moveChildren(Target, pos)
+
 
         if MouseReleased:
             Target=None # Drop item, if we have any
             for item in block_group:
                 for item2 in block_group:
-                    if item.child == item2 and not pygame.sprite.collide_rect(item,item2):
+                    if item.child == item2: #and not pygame.sprite.collide_rect(item,item2):
                         disconnectBlocks(item,item2)
             
             for item in block_group:
