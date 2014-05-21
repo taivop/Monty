@@ -1,4 +1,6 @@
 import pygame
+import os, sys
+sys.path.append(os.path.abspath(".."))
 
 from gui.StartTriangle import StartTriangle
 from gui.blocks import Block
@@ -47,6 +49,7 @@ def moveChildren(target, pos, i=1):
         moveChildren(target.child, pos, i)
 
 def main(): # Where we start
+
     pygame.init()
     screen=pygame.display.set_mode((800,600))
     running=True
