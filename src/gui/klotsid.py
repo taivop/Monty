@@ -5,7 +5,6 @@ from gui.blocks import Block
 from gui.CodeBox import CodeBox
 
 
-
 def connectBlocks(blockone, blocktwo):
     if blockone.pos[1]<blocktwo.pos[1]:
         upperblock = blockone
@@ -30,6 +29,13 @@ def connectBlocks(blockone, blocktwo):
 def disconnectBlocks(parent, child):
     parent.child = None
     print("disconnected blocks")
+
+def mouseIsOn(item, mouse_pos):
+    if (item.pos[0]-item.width) <= mouse_pos[0] <= (item.pos[0]+item.width) and\
+                            (item.pos[1]+item.height) >= mouse_pos[1] >= (item.pos[1]-item.height):
+        return True
+    return False
+
 
 def main(): # Where we start
     pygame.init()
@@ -68,26 +74,20 @@ def main(): # Where we start
                 MouseDown=False
              
         if MousePressed==True:
-            should_create_block = True      # do we want to create a new block?
+            should_create_block = True              # do we want to create a new block?
 
-            for item in block_group: # search all items
-                if (pos[0]>=(item.pos[0]-item.width) and
-                    pos[0]<=(item.pos[0]+item.width) and
-                    pos[1]>=(item.pos[1]-item.height) and
-                    pos[1]<=(item.pos[1]+item.height) ): # inside the bounding box
-                    Target=item # "pick up" item
+            for item in block_group:
+                if mouseIsOn(item, pos):            # inside the bounding box
+                    Target=item                     # "pick up" item
 
             for item in other_group:
-                if (pos[0]>=(item.pos[0]-item.width) and
-                    pos[0]<=(item.pos[0]+item.width) and
-                    pos[1]>=(item.pos[1]-item.height) and
-                    pos[1]<=(item.pos[1]+item.height) ): # inside the bounding box
-                    should_create_block = False # "pick up" item
+                if mouseIsOn(item, pos):            # inside the bounding box
+                    should_create_block = False     # do not want to create a block
 
             
-            if Target is None and should_create_block: # didn't find any?
+            if Target is None and should_create_block:  # didn't click on a block or other object
                 Target=Block((0,0,255),pos,200,40)
-                block_group.add(Target) # create a new one
+                block_group.add(Target)                 # create a new block
                 
         if MouseDown and Target is not None: # if we are dragging something
             Target.pos=pos
