@@ -31,6 +31,8 @@ def disconnectBlocks(parent, child):
     print("disconnected blocks")
 
 def mouseIsOn(item, mouse_pos):
+    """ Check if mouse (at mouse_pos) is on the item.
+    """
     if (item.pos[0]) <= mouse_pos[0] <= (item.pos[0]+item.width) and\
                             (item.pos[1]+item.height) >= mouse_pos[1] >= (item.pos[1]):
         return True
