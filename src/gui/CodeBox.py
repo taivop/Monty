@@ -4,8 +4,10 @@ import pygame
 
 class CodeBox(pygame.sprite.Sprite):
 
-    x = 600                     # x of top left corner of codebox
-    y = 0                       # y of top left corner of codebox
+    pos = (600,0)
+
+    x = pos[0]                     # x of top left corner of codebox
+    y = pos[1]                       # y of top left corner of codebox
     width = 200                 # width of codebox
     height = 800                # height of codebox
 
