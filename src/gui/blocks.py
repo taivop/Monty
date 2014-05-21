@@ -5,6 +5,7 @@ from gui.eztext import Textbox
 from language.asthandler import AstHandler
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
+
     def __init__(self,color,pos,width,height): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.color=color
@@ -21,6 +22,9 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         return self.child is not None
 
     def Render(self,screen):
+
+        pygame.draw.rect(screen, (255, 0, 0), self.rect, 3) # for debugging reasons
+
         blockimg = self.image
         screen.blit(blockimg,(self.pos))
         self.textbox.Render(screen, self.pos)
