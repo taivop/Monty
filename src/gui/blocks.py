@@ -16,7 +16,11 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = pos
         self.child = None
+        self.parent = None
         self.textbox = Textbox()
+
+    def hasParent(self):
+        return self.parent is not None
 
     def hasChild(self):
         return self.child is not None

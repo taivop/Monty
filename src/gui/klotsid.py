@@ -14,22 +14,31 @@ def connectBlocks(blockone, blocktwo):
     else:
         upperblock = blocktwo
         bottomblock = blockone
-        
+
+    if upperblock.hasChild() or bottomblock.hasParent():
+        return
     upperblock.child = bottomblock
+    bottomblock.parent = upperblock
     
-    if isinstance(upperblock,Block):
-        bottomblock.pos=upperblock.pos[0], upperblock.pos[1]+42
-    else:
-        print(bottomblock.pos)
-        print(upperblock.pos)
-        bottomblock.pos=0, upperblock.pos[1]+upperblock.height-5
+    #if isinstance(upperblock,Block):
+    #    bottomblock.pos=upperblock.pos[0], upperblock.pos[1]+42
+    #else:
+    #   print(bottomblock.pos)
+    #   print(upperblock.pos)
+    #    bottomblock.pos=0, upperblock.pos[1]+upperblock.height-5
         
-    bottomblock.rect.x, bottomblock.rect.y = bottomblock.pos
+    #bottomblock.rect.x, bottomblock.rect.y = bottomblock.pos
+    moveChildren(upperblock,upperblock.pos)
 
     print("connected blocks")
 
-def disconnectBlocks(parent, child):
-    parent.child = None
+def disconnectBlocks(block):
+    #if block.hasChild():
+    #    block.child.parent = None
+    if block.hasParent():
+        block.parent.child = None
+    #block.child = None
+    block.parent = None
     print("disconnected blocks")
 
 def mouseIsOn(item, mouse_pos):
@@ -47,6 +56,19 @@ def moveChildren(target, pos, i=1):
         target.child.rect.y=pos[1]+target.height*i
         i+=1
         moveChildren(target.child, pos, i)
+
+def connect(target, block_group, first = True):
+    if first:
+        for item in block_group:
+            if item != target and pygame.sprite.collide_rect(item,target):
+                connectBlocks(target, item)
+    if target.hasChild():
+        connect(target.child, block_group, False)
+    else:
+        for item in block_group:
+            if item != target and pygame.sprite.collide_rect(item,target):
+                connectBlocks(target, item)
+
 
 def main(): # Where we start
 
@@ -100,6 +122,7 @@ def main(): # Where we start
             if Target is None and should_create_block:  # didn't click on a block or other object
                 Target=Block((0,0,255),pos,200,40)
                 block_group.add(Target)                 # create a new block
+
                 
         if MouseDown and Target is not None: # if we are dragging something
             Target.pos=pos
@@ -108,18 +131,24 @@ def main(): # Where we start
 
 
         if MouseReleased:
+            disconnectBlocks(Target)
+            connect(Target, block_group)
+            #for item in block_group:
+            #    if item != Target and pygame.sprite.collide_rect(item,Target):
+            #        connectBlocks(Target, item)
+            #        break
+            #for item in block_group:
+            #    for item2 in block_group:
+            #        if item.child == item2: #and not pygame.sprite.collide_rect(item,item2):
+            #            disconnectBlocks(item,item2)
+
+
             Target=None # Drop item, if we have any
-            for item in block_group:
-                for item2 in block_group:
-                    if item.child == item2: #and not pygame.sprite.collide_rect(item,item2):
-                        disconnectBlocks(item,item2)
-            
-            for item in block_group:
-                item.Render(screen) # Draw all items'
-                for item2 in block_group:
-                    if item != item2 and pygame.sprite.collide_rect(item,item2):
-                        connectBlocks(item,item2)
-                        break
+            #for item in block_group:
+            #    item.Render(screen) # Draw all items'
+            #    for item2 in block_group:
+            #        if item != item2 and pygame.sprite.collide_rect(item,item2):
+            #            connectBlocks(item,item2,pos)
 
         # RENDERING
 
