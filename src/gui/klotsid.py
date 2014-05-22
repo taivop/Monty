@@ -19,25 +19,14 @@ def connectBlocks(blockone, blocktwo):
         return
     upperblock.child = bottomblock
     bottomblock.parent = upperblock
-    
-    #if isinstance(upperblock,Block):
-    #    bottomblock.pos=upperblock.pos[0], upperblock.pos[1]+42
-    #else:
-    #   print(bottomblock.pos)
-    #   print(upperblock.pos)
-    #    bottomblock.pos=0, upperblock.pos[1]+upperblock.height-5
-        
-    #bottomblock.rect.x, bottomblock.rect.y = bottomblock.pos
+
     moveChildren(upperblock,upperblock.pos)
 
     print("connected blocks")
 
 def disconnectBlocks(block):
-    #if block.hasChild():
-    #    block.child.parent = None
     if block.hasParent():
         block.parent.child = None
-    #block.child = None
     block.parent = None
     print("disconnected blocks")
 
@@ -79,6 +68,7 @@ def main(): # Where we start
     MouseDown=False # mouse is held down
     MouseReleased=False # Released THIS FRAME
     Target=None # target of Drag/Drop
+    targettext=None
 
     block_group = pygame.sprite.Group()     # group for keeping Block objects
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
@@ -113,6 +103,8 @@ def main(): # Where we start
             for item in block_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
                     Target=item                     # "pick up" item
+                    targettext=item.textbox
+
 
             for item in other_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
@@ -122,39 +114,31 @@ def main(): # Where we start
             if Target is None and should_create_block:  # didn't click on a block or other object
                 Target=Block((0,0,255),pos,200,40)
                 block_group.add(Target)                 # create a new block
+                targettext=Target.textbox
+
+            Target.deltax=pos[0]-Target.pos[0]
+            Target.deltay=pos[1]-Target.pos[1]
 
                 
         if MouseDown and Target is not None: # if we are dragging something
-            Target.pos=pos
-            Target.rect.x, Target.rect.y = pos# move the target with us
-            moveChildren(Target, pos)
+
+
+            Target.pos = pos[0]-Target.deltax, pos[1]-Target.deltay
+            Target.rect.x, Target.rect.y = Target.pos
+            moveChildren(Target, Target.pos)
 
 
         if MouseReleased:
             disconnectBlocks(Target)
             connect(Target, block_group)
-            #for item in block_group:
-            #    if item != Target and pygame.sprite.collide_rect(item,Target):
-            #        connectBlocks(Target, item)
-            #        break
-            #for item in block_group:
-            #    for item2 in block_group:
-            #        if item.child == item2: #and not pygame.sprite.collide_rect(item,item2):
-            #            disconnectBlocks(item,item2)
-
-
             Target=None # Drop item, if we have any
-            #for item in block_group:
-            #    item.Render(screen) # Draw all items'
-            #    for item2 in block_group:
-            #        if item != item2 and pygame.sprite.collide_rect(item,item2):
-            #            connectBlocks(item,item2,pos)
 
         # RENDERING
 
         for item in block_group:
             item.Render(screen) # Draw all items
-            item.textbox.Update(event)
+            if targettext == item.textbox:
+                item.textbox.Update(event)
 
         for item in other_group:
             item.Render(screen)

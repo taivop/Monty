@@ -18,6 +18,8 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.child = None
         self.parent = None
         self.textbox = Textbox()
+        self.deltax=0
+        self.deltay=0
 
     def hasParent(self):
         return self.parent is not None
