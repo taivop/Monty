@@ -122,7 +122,13 @@ def main(): # Where we start
             for item in block_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
                     Target=item                     # "pick up" item
-                    targettext=item.textbox
+                    if targettext != None:
+                        targettext.boxColor = (0,0,0)
+                    if pos[0] < item.pos[0] + item.width/2:
+                        targettext=Target.textbox
+                    else:
+                        targettext=Target.textbox2
+                    targettext.boxColor = (255,255,255)
 
 
             for item in other_group:
@@ -133,7 +139,7 @@ def main(): # Where we start
             if Target is None and should_create_block:  # didn't click on a block or other object
                 Target=Block((0,0,255),pos,200,40)
                 block_group.add(Target)                 # create a new block
-                targettext=Target.textbox
+
 
             if Target is not None:
                 Target.deltax=pos[0]-Target.pos[0]
@@ -162,6 +168,9 @@ def main(): # Where we start
             item.Render(screen) # Draw all items
             if targettext == item.textbox:
                 item.textbox.Update(event)
+            elif targettext == item.textbox2:
+                item.textbox2.Update(event)
+
 
         for item in other_group:
             item.Render(screen)

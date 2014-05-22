@@ -20,6 +20,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.child = None
         self.parent = None
         self.textbox = Textbox()
+        self.textbox2= Textbox(True)
         self.deltax=0
         self.deltay=0
 
@@ -34,7 +35,17 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
         blockimg = self.image
         screen.blit(blockimg,(self.pos))
-        self.textbox.Render(screen, self.pos)
+
+        #Textbox
+        self.textbox.Render(screen, self.pos[0]+2,self.pos[1]+12,60,20)
+
+        #Operator
+        font = pygame.font.Font(None, 30)
+        text = font.render("=",1,(255,255,255))
+        screen.blit(text, (self.pos[0]+70,self.pos[1]+10))
+
+        #Textbox
+        self.textbox2.Render(screen, self.pos[0]+92,self.pos[1]+12,60,20)
 
 class AssignBlock():
     """ Class for assignment statements. Tested for x = 1, y = x+5, z = x+y (and analogous assignments)

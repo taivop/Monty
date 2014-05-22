@@ -3,18 +3,20 @@ from pygame.locals import *
 import pygame, string
 
 class Textbox():
-    def __init__(self):
+    def __init__(self, integerBox=False):
         #self.color = (255,255,255)
-        self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='')
+        if integerBox:
+            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='0123456789')
+        else:
+            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+        self.boxColor = (0,0,0)
 
 
-
-    def Render(self, screen, pos):
-        #pygame.draw.rect(screen, color, pygame.Rect(pos, (30,100)))
-        self.txtbx.set_pos(pos[0]+5, pos[1]+15)
+    def Render(self, screen, x, y, width, height):
+        self.txtbx.set_pos(x+2, y+1)
         self.txtbx.draw(screen)
-        self.ristkylik1 = pygame.Rect(pos[0]+2, pos[1]+12,60,20)
-        pygame.draw.rect(screen, (0,0,0), self.ristkylik1, 3)
+        self.ristkylik1 = pygame.Rect(x, y, width, height)
+        pygame.draw.rect(screen, self.boxColor, self.ristkylik1, 3)
 
     def Update(self, event):
         self.txtbx.update(event)
@@ -37,8 +39,8 @@ class Input:
     """ A text input for pygame apps """
     def __init__(self, **options):
         """ Options: x, y, font, color, restricted, maxlength, prompt """
-        self.options = Config(options, ['x', '0'], ['y', '0'], ['font', 'pygame.font.Font(None, 22)'],
-                              ['color', '(0,0,0)'], ['restricted', '\'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#$%&\\\'()*+,-./:;<=>?@[\]^_`{|}~\''],
+        self.options = Config(options, ['x', '0'], ['y', '0'], ['font', 'pygame.font.SysFont("Courier", 18,bold=True)'],
+                              ['color', '(0,0,0)'], ['restricted', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'],
                               ['maxlength', '-1'], ['prompt', '\'\''])
         self.x = self.options.x; self.y = self.options.y
         self.font = self.options.font
