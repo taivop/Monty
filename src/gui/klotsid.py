@@ -116,8 +116,9 @@ def main(): # Where we start
                 block_group.add(Target)                 # create a new block
                 targettext=Target.textbox
 
-            Target.deltax=pos[0]-Target.pos[0]
-            Target.deltay=pos[1]-Target.pos[1]
+            if Target is not None:
+                Target.deltax=pos[0]-Target.pos[0]
+                Target.deltay=pos[1]-Target.pos[1]
 
                 
         if MouseDown and Target is not None: # if we are dragging something
@@ -128,7 +129,7 @@ def main(): # Where we start
             moveChildren(Target, Target.pos)
 
 
-        if MouseReleased:
+        if MouseReleased and Target is not None:
             disconnectBlocks(Target)
             connect(Target, block_group)
             Target=None # Drop item, if we have any
