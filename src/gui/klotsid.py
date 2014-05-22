@@ -71,19 +71,19 @@ def main(): # Where we start
     while running:
         screen.fill((0,0,0)) # clear screen
         pos = pygame.mouse.get_pos()
-        events = pygame.event.get()
-        for Event in events:
-            if Event.type == pygame.QUIT:
-                running = False
-                break  # get out now
-            
-            if Event.type == pygame.MOUSEBUTTONDOWN:
-                MousePressed = True
-                MouseDown = True
-               
-            if Event.type == pygame.MOUSEBUTTONUP:
-                MouseReleased = True
-                MouseDown = False
+        event = pygame.event.wait()
+        #for Event in events:
+        if event.type == pygame.QUIT:
+            running = False
+            break  # get out now
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            MousePressed = True
+            MouseDown = True
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            MouseReleased = True
+            MouseDown = False
              
         if MousePressed == True:
             should_create_block = True              # do we want to create a new block?
@@ -117,14 +117,15 @@ def main(): # Where we start
             for item in block_group:
                 item.Render(screen) # Draw all items'
                 for item2 in block_group:
-                    if item != item2 and pygame.sprite.collide_rect(item,item2) and item.child!=item2 and item2.child!=item:
+                    if item != item2 and pygame.sprite.collide_rect(item,item2):
                         connectBlocks(item,item2)
+                        break
 
         # RENDERING
 
         for item in block_group:
             item.Render(screen) # Draw all items
-            item.textbox.Update(events)
+            item.textbox.Update(event)
 
         for item in other_group:
             item.Render(screen)
