@@ -20,3 +20,6 @@ class StartTriangle(pygame.sprite.Sprite):
         points = [point_top_left, point_top_right,point_bottom]
         pygame.draw.polygon(screen, self.color, points, 0)
         DebugHelper.drawDebugRect(self.rect, screen)
+
+    def hasChild(self):
+        return self.child is not None

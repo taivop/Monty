@@ -1,4 +1,6 @@
 import pygame
+from random import randint # for testing purposes, random color of 3 on every block
+
 import os
 from gui.eztext import Textbox
 from language.asthandler import AstHandler
@@ -12,7 +14,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.pos=pos
         self.width=width
         self.height=height
-        self.image = pygame.image.load((os.path.sep).join(os.getcwd().split(os.path.sep)[:-2])+os.path.sep+"resources"+os.path.sep+"blockimg.png")
+        self.image = pygame.image.load((os.path.sep).join(os.getcwd().split(os.path.sep)[:-2])+os.path.sep+"resources"+os.path.sep+"block"+str(randint(1,3))+".png")
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = pos
         self.child = None

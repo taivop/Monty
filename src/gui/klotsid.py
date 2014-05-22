@@ -19,7 +19,6 @@ def connectBlocks(blockone, blocktwo):
         return
     upperblock.child = bottomblock
     bottomblock.parent = upperblock
-
     moveChildren(upperblock,upperblock.pos)
 
     print("connected blocks")
@@ -27,8 +26,8 @@ def connectBlocks(blockone, blocktwo):
 def disconnectBlocks(block):
     if block.hasParent():
         block.parent.child = None
-    block.parent = None
-    print("disconnected blocks")
+        block.parent = None
+        print("disconnected blocks")
 
 def mouseIsOn(item, mouse_pos):
     """ Check if mouse (at mouse_pos) is on the item.
@@ -58,6 +57,23 @@ def connect(target, block_group, first = True):
             if item != target and pygame.sprite.collide_rect(item,target):
                 connectBlocks(target, item)
 
+def connectToStart(target,triangle): # connecting to the start triangle
+    if pygame.sprite.collide_rect(target,triangle):
+        if not triangle.hasChild():
+            triangle.child = target
+            target.parent = triangle
+            target.pos = triangle.x-10, triangle.y
+            target.rect.x, target.rect.y = target.pos
+            print("connected to start")
+            moveChildren(target, target.pos)
+
+def bringTargetToFront(target,group): # bringing the selected block and its children to front
+
+    group.remove(target)
+    group.add(target)
+    if target.hasChild():
+        bringTargetToFront(target.child,group)
+    
 
 def main(): # Where we start
 
@@ -70,7 +86,7 @@ def main(): # Where we start
     Target=None # target of Drag/Drop
     targettext=None
 
-    block_group = pygame.sprite.Group()     # group for keeping Block objects
+    block_group = pygame.sprite.LayeredUpdates()     # group for keeping Block objects (IN ORDER)
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
 
     triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
@@ -81,12 +97,15 @@ def main(): # Where we start
     other_group.add(codebox)
     
     while running:
-        screen.fill((0,0,0)) # clear screen
+        
+        
+        screen.fill((245,245,245)) # clear screen
         pos = pygame.mouse.get_pos()
         event = pygame.event.wait()
-        #for Event in events:
-        if event.type == pygame.QUIT:
+
+        if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             running = False
+            pygame.quit()
             break  # get out now
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -127,11 +146,14 @@ def main(): # Where we start
             Target.pos = pos[0]-Target.deltax, pos[1]-Target.deltay
             Target.rect.x, Target.rect.y = Target.pos
             moveChildren(Target, Target.pos)
+            bringTargetToFront(Target,block_group) # the blocks on the move are always on top
 
 
         if MouseReleased and Target is not None:
             disconnectBlocks(Target)
             connect(Target, block_group)
+            connectToStart(Target, triangle)
+
             Target=None # Drop item, if we have any
 
         # RENDERING
@@ -144,6 +166,7 @@ def main(): # Where we start
         for item in other_group:
             item.Render(screen)
 
+            
         pygame.display.flip()
 
         # RESETTING some values
