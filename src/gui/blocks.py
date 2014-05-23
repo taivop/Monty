@@ -45,8 +45,8 @@ class AssignBlock(Block):
         super().__init__(pos, "block1.png")
         self.var_name = "Default"
         self.value = "Default"
-        self.textbox = Textbox()
-        self.textbox2 = Textbox()
+        self.textbox = Textbox(7)
+        self.textbox2 = Textbox(7)
 
     def getAstNode(self):
         # TODO: handle error if not a legal assignment
@@ -57,6 +57,8 @@ class AssignBlock(Block):
 
     def makeText(self):
         # create code corresponding to this block
+        self.var_name = self.textbox.getValue()
+        self.value = self.textbox2.getValue()
         self.text = "{0} = {1}".format(self.var_name, self.value)
 
     def getText(self):
@@ -69,15 +71,15 @@ class AssignBlock(Block):
     def Render(self, screen):
         super().Render(screen)
         #Textbox
-        self.textbox.Render(screen, self.pos[0]+2,self.pos[1]+12,60,20)
+        self.textbox.Render(screen, self.pos[0]+2,self.pos[1]+12,84,20)
 
         #Operator
         font = pygame.font.Font(None, 30)
         text = font.render("=",1,(0,0,0))
-        screen.blit(text, (self.pos[0]+70,self.pos[1]+10))
+        screen.blit(text, (self.pos[0]+89,self.pos[1]+10))
 
         #Textbox
-        self.textbox2.Render(screen, self.pos[0]+92,self.pos[1]+12,60,20)
+        self.textbox2.Render(screen, self.pos[0]+104,self.pos[1]+12,84,20)
 
 
 
@@ -89,7 +91,7 @@ class PrintBlock(Block):
     def __init__(self, pos):
         super().__init__(pos, "block2.png")
         self.expression = "Default"
-        self.textbox = Textbox()
+        self.textbox = Textbox(12)
 
     def getAstNode(self):
         # TODO: handle error if not a legal print
@@ -101,6 +103,7 @@ class PrintBlock(Block):
 
     def makeText(self):
         # create code corresponding to this block
+        self.expression = self.textbox.getValue()
         self.text = "print({0})".format(self.expression)
 
     def getText(self):
@@ -117,4 +120,4 @@ class PrintBlock(Block):
         font = pygame.font.SysFont("Courier", 18, bold=True)
         text = font.render("Print",1,(0,0,0))
         screen.blit(text, (self.pos[0]+2,self.pos[1]+12))
-        self.textbox.Render(screen, self.pos[0]+70,self.pos[1]+10,60,20)
+        self.textbox.Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)

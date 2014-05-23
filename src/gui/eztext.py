@@ -3,12 +3,12 @@ from pygame.locals import *
 import pygame, string
 
 class Textbox():
-    def __init__(self, integerBox=False):
+    def __init__(self, length, integerBox=False):
         #self.color = (255,255,255)
         if integerBox:
-            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='0123456789*(') # * on (, ( on )
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789*(') # * on (, ( on )
         else:
-            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*(')
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*(')
         self.borderColor = (0,0,0)
         #self.rectColor = (100,100,100)
 
@@ -22,6 +22,9 @@ class Textbox():
 
     def Update(self, event):
         self.txtbx.update(event)
+
+    def getValue(self):
+        return self.txtbx.value
 
 
 class ConfigError(KeyError): pass
