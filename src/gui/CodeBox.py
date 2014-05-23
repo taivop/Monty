@@ -11,6 +11,8 @@ class CodeBox(pygame.sprite.Sprite):
     width = 200                 # width of codebox
     height = 800                # height of codebox
 
+    title_height = 50           # height of title box
+
     top_padding = 60            # top-padding of first line of text
     left_padding = 20           # left-padding of every line of text
     line_height = 30            # height of each line of text
@@ -30,12 +32,13 @@ class CodeBox(pygame.sprite.Sprite):
 
     def Render(self,screen):
 
-        pygame.draw.rect(screen, (255,255,255), (self.x,self.y,self.width,self.height))
+        pygame.draw.rect(screen, (255,255,255), (self.x,self.y,self.width,self.height)) # main white box
+        pygame.draw.rect(screen, (124,201,255), (self.x,self.y,self.width,self.title_height)) # title box
         DebugHelper.drawDebugRect(self.rect, screen)
 
         # Title line
         label_obj = self.title_font.render("Program text:", 1, (0, 0, 0))
-        blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+10))
+        blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+5))
         DebugHelper.drawDebugRect(blit, screen)
 
         for i in range(0, len(self.lineList)):
