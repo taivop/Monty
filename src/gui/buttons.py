@@ -10,6 +10,8 @@ class BlockButton(pygame.sprite.Sprite):
         self.borderColor = (0,0,0)
         self.text = self.font.render(string, 1, self.color)
         self.rect = self.text.get_rect()
+        self.rect.width = 60
+        self.rect.height = 25
         self.width = self.rect.width
         self.height = self.rect.height
         self.pos = (x,y)
