@@ -133,7 +133,6 @@ def main(): # Where we start
             MouseDown = False
              
         if MousePressed == True:
-            should_create_block = False              # do we want to create a new block?
 
             for item in block_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
@@ -148,22 +147,19 @@ def main(): # Where we start
                     elif item.textbox != None:
                         targettext=Target.textbox
                     targettext.borderColor = (255,255,255)
-                    break
 
 
-            for item in other_group:
-                if mouseIsOn(item, pos):            # inside the bounding box
-                    should_create_block = False     # do not want to create a block
-                    break
+            #for item in other_group:
+            #    if mouseIsOn(item, pos):            # inside the bounding box
+
 
             for item in button_group:
                 if mouseIsOn(item, pos):
-                    should_create_block = True              # do we want to create a new block?
                     targetbutton = item
                     break
 
             
-            if Target is None and should_create_block:  # didn't click on a block or other object
+            if Target is None and targetbutton != None:  # didn't click on a block or other object
                 #Target=Block(pos)
                 Target=targetbutton.newBlock()
                 block_group.add(Target)                 # create a new block

@@ -6,9 +6,9 @@ class Textbox():
     def __init__(self, length, integerBox=False):
         #self.color = (255,255,255)
         if integerBox:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789*(') # * on (, ( on )
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!') # * on (, ( on )
         else:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*(')
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!')
         self.borderColor = (0,0,0)
         #self.rectColor = (100,100,100)
 
@@ -78,7 +78,15 @@ class Input:
             if event.key == K_BACKSPACE: self.value = self.value[:-1]
             elif event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = True
             elif event.key == K_SPACE: self.value += ' '
-            if event.key == K_RETURN: print(self.value)
+            char = event.unicode
+            if char == '+' and '+' in self.restricted: self.value += '+'
+            elif char == '-' and '-' in self.restricted: self.value += '-'
+            elif char == '(' and '(' in self.restricted: self.value += '('
+            elif char == ')' and ')' in self.restricted: self.value += ')'
+            elif char == '*' and '*' in self.restricted: self.value += '*'
+            elif char == '/' and '/' in self.restricted: self.value += '/'
+            elif char == '!' and '!' in self.restricted: self.value += '!'
+            elif char == '=' and '=' in self.restricted: self.value += '='
             if not self.shifted:
                 if event.key == K_a and 'a' in self.restricted: self.value += 'a'
                 elif event.key == K_b and 'b' in self.restricted: self.value += 'b'
@@ -116,17 +124,17 @@ class Input:
                 elif event.key == K_7 and '7' in self.restricted: self.value += '7'
                 elif event.key == K_8 and '8' in self.restricted: self.value += '8'
                 elif event.key == K_9 and '9' in self.restricted: self.value += '9'
-                elif event.key == K_BACKQUOTE and '`' in self.restricted: self.value += '`'
-                elif event.key == K_MINUS and '-' in self.restricted: self.value += '-'
-                elif event.key == K_EQUALS and '=' in self.restricted: self.value += '='
-                elif event.key == K_LEFTBRACKET and '[' in self.restricted: self.value += '['
-                elif event.key == K_RIGHTBRACKET and ']' in self.restricted: self.value += ']'
-                elif event.key == K_BACKSLASH and '\\' in self.restricted: self.value += '\\'
-                elif event.key == K_SEMICOLON and ';' in self.restricted: self.value += ';'
-                elif event.key == K_QUOTE and '\'' in self.restricted: self.value += '\''
-                elif event.key == K_COMMA and ',' in self.restricted: self.value += ','
-                elif event.key == K_PERIOD and '.' in self.restricted: self.value += '.'
-                elif event.key == K_SLASH and '/' in self.restricted: self.value += '/'
+                # elif event.key == K_BACKQUOTE and '`' in self.restricted: self.value += '`'
+                # elif event.key == K_MINUS and '-' in self.restricted: self.value += '-'
+                # elif event.key == K_EQUALS and '=' in self.restricted: self.value += '='
+                # elif event.key == K_LEFTBRACKET and '[' in self.restricted: self.value += '['
+                # elif event.key == K_RIGHTBRACKET and ']' in self.restricted: self.value += ']'
+                # elif event.key == K_BACKSLASH and '\\' in self.restricted: self.value += '\\'
+                # elif event.key == K_SEMICOLON and ';' in self.restricted: self.value += ';'
+                # elif event.key == K_QUOTE and '\'' in self.restricted: self.value += '\''
+                # elif event.key == K_COMMA and ',' in self.restricted: self.value += ','
+                # elif event.key == K_PERIOD and '.' in self.restricted: self.value += '.'
+                # elif event.key == K_SLASH and '/' in self.restricted: self.value += '/'
             elif self.shifted:
                 if event.key == K_a and 'A' in self.restricted: self.value += 'A'
                 elif event.key == K_b and 'B' in self.restricted: self.value += 'B'
@@ -154,26 +162,26 @@ class Input:
                 elif event.key == K_x and 'X' in self.restricted: self.value += 'X'
                 elif event.key == K_y and 'Y' in self.restricted: self.value += 'Y'
                 elif event.key == K_z and 'Z' in self.restricted: self.value += 'Z'
-                elif event.key == K_0 and ')' in self.restricted: self.value += ')'
-                elif event.key == K_1 and '!' in self.restricted: self.value += '!'
-                elif event.key == K_2 and '@' in self.restricted: self.value += '@'
-                elif event.key == K_3 and '#' in self.restricted: self.value += '#'
-                elif event.key == K_4 and '$' in self.restricted: self.value += '$'
-                elif event.key == K_5 and '%' in self.restricted: self.value += '%'
-                elif event.key == K_6 and '^' in self.restricted: self.value += '^'
-                elif event.key == K_7 and '&' in self.restricted: self.value += '&'
-                elif event.key == K_8 and '*' in self.restricted: self.value += '('
-                elif event.key == K_9 and '(' in self.restricted: self.value += ')'
-                elif event.key == K_BACKQUOTE and '~' in self.restricted: self.value += '~'
-                elif event.key == K_MINUS and '_' in self.restricted: self.value += '_'
-                elif event.key == K_EQUALS and '+' in self.restricted: self.value += '+'
-                elif event.key == K_LEFTBRACKET and '{' in self.restricted: self.value += '{'
-                elif event.key == K_RIGHTBRACKET and '}' in self.restricted: self.value += '}'
-                elif event.key == K_BACKSLASH and '|' in self.restricted: self.value += '|'
-                elif event.key == K_SEMICOLON and ':' in self.restricted: self.value += ':'
-                elif event.key == K_QUOTE and '"' in self.restricted: self.value += '"'
-                elif event.key == K_COMMA and '<' in self.restricted: self.value += '<'
-                elif event.key == K_PERIOD and '>' in self.restricted: self.value += '>'
-                elif event.key == K_SLASH and '?' in self.restricted: self.value += '?'
+                # elif event.key == K_0 and ')' in self.restricted: self.value += ')'
+                # elif event.key == K_1 and '!' in self.restricted: self.value += '!'
+                # elif event.key == K_2 and '@' in self.restricted: self.value += '@'
+                # elif event.key == K_3 and '#' in self.restricted: self.value += '#'
+                # elif event.key == K_4 and '$' in self.restricted: self.value += '$'
+                # elif event.key == K_5 and '%' in self.restricted: self.value += '%'
+                # elif event.key == K_6 and '^' in self.restricted: self.value += '^'
+                # elif event.key == K_7 and '&' in self.restricted: self.value += '&'
+                # elif event.key == K_8 and '*' in self.restricted: self.value += '('
+                # elif event.key == K_9 and '(' in self.restricted: self.value += ')'
+                # elif event.key == K_BACKQUOTE and '~' in self.restricted: self.value += '~'
+                # elif event.key == K_MINUS and '_' in self.restricted: self.value += '_'
+                # elif event.key == K_EQUALS and '+' in self.restricted: self.value += '+'
+                # elif event.key == K_LEFTBRACKET and '{' in self.restricted: self.value += '{'
+                # elif event.key == K_RIGHTBRACKET and '}' in self.restricted: self.value += '}'
+                # elif event.key == K_BACKSLASH and '|' in self.restricted: self.value += '|'
+                # elif event.key == K_SEMICOLON and ':' in self.restricted: self.value += ':'
+                # elif event.key == K_QUOTE and '"' in self.restricted: self.value += '"'
+                # elif event.key == K_COMMA and '<' in self.restricted: self.value += '<'
+                # elif event.key == K_PERIOD and '>' in self.restricted: self.value += '>'
+                # elif event.key == K_SLASH and '?' in self.restricted: self.value += '?'
 
         if len(self.value) > self.maxlength and self.maxlength >= 0: self.value = self.value[:-1]
