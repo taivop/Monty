@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(".."))
 from gui.StartTriangle import StartTriangle
 from gui.blocks import Block
 from gui.CodeBox import CodeBox
+from gui.buttons import *
 
 
 def connectBlocks(blockone, blocktwo):
@@ -85,9 +86,11 @@ def main(): # Where we start
     MouseReleased=False # Released THIS FRAME
     Target=None # target of Drag/Drop
     targettext=None
+    targetbutton=None
 
     block_group = pygame.sprite.LayeredUpdates()     # group for keeping Block objects (IN ORDER)
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
+    button_group = pygame.sprite.Group()
 
     triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
     other_group.add(triangle) # add to list of things to draw
@@ -95,9 +98,13 @@ def main(): # Where we start
     codebox = CodeBox()
     codebox.setLineList(["foo = bar()", "print(moot)", "a line of code"])
     other_group.add(codebox)
-    
+
+    assignButton = AssignButton(500, 40)
+    printButton = PrintButton(500, 70)
+    button_group.add(assignButton)
+    button_group.add(printButton)
+
     while running:
-        
         
         screen.fill((245,245,245)) # clear screen
         pos = pygame.mouse.get_pos()
@@ -117,27 +124,39 @@ def main(): # Where we start
             MouseDown = False
              
         if MousePressed == True:
-            should_create_block = True              # do we want to create a new block?
+            should_create_block = False              # do we want to create a new block?
 
             for item in block_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
                     Target=item                     # "pick up" item
                     if targettext != None:
                         targettext.borderColor = (0,0,0)
-                    if pos[0] < item.pos[0] + item.width/2:
+                    if item.textbox != None and item.textbox2 != None:
+                        if pos[0] < item.pos[0] + item.width/2:
+                            targettext=Target.textbox
+                        else:
+                            targettext=Target.textbox2
+                    elif item.textbox != None:
                         targettext=Target.textbox
-                    else:
-                        targettext=Target.textbox2
                     targettext.borderColor = (255,255,255)
+                    break
 
 
             for item in other_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
                     should_create_block = False     # do not want to create a block
+                    break
+
+            for item in button_group:
+                if mouseIsOn(item, pos):
+                    should_create_block = True              # do we want to create a new block?
+                    targetbutton = item
+                    break
 
             
             if Target is None and should_create_block:  # didn't click on a block or other object
-                Target=Block((0,0,255),pos,200,40)
+                #Target=Block(pos)
+                Target=targetbutton.newBlock()
                 block_group.add(Target)                 # create a new block
 
 
@@ -166,13 +185,16 @@ def main(): # Where we start
 
         for item in block_group:
             item.Render(screen) # Draw all items
-            if targettext == item.textbox:
+            if item.textbox != None and targettext == item.textbox:
                 item.textbox.Update(event)
-            elif targettext == item.textbox2:
+            elif item.textbox2 != None and targettext == item.textbox2:
                 item.textbox2.Update(event)
 
 
         for item in other_group:
+            item.Render(screen)
+
+        for item in button_group:
             item.Render(screen)
 
             
