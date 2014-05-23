@@ -68,6 +68,7 @@ def connectToStart(target,triangle): # connecting to the start triangle
             print("connected to start")
             moveChildren(target, target.pos)
 
+
 def bringTargetToFront(target,group): # bringing the selected block and its children to front
 
     group.remove(target)
@@ -96,7 +97,7 @@ def main(): # Where we start
     other_group.add(triangle) # add to list of things to draw
 
     codebox = CodeBox()
-    codebox.setLineList(["foo = bar()", "print(moot)", "a line of code"])
+    #codebox.setLineList(["foo = bar()", "print(moot)", "a line of code"])
     other_group.add(codebox)
 
     assignButton = AssignButton(500, 40)
@@ -178,6 +179,7 @@ def main(): # Where we start
             disconnectBlocks(Target)
             connect(Target, block_group)
             connectToStart(Target, triangle)
+            codebox.update(triangle)
 
             Target=None # Drop item, if we have any
 

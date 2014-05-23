@@ -23,6 +23,8 @@ class CodeBox(pygame.sprite.Sprite):
     title_font = None
 
     lineList = []
+    blockList = []
+    start_triangle_child_count = -1
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -41,11 +43,22 @@ class CodeBox(pygame.sprite.Sprite):
         blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+5))
         DebugHelper.drawDebugRect(blit, screen)
 
-        for i in range(0, len(self.lineList)):
-            line = self.lineList[i]
+        for i in range(0, len(self.blockList)):
+            line = self.blockList[i].getText()
             label_obj = self.font.render(line, 1, (0, 0, 0))
             blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
             DebugHelper.drawDebugRect(blit, screen)
 
     def setLineList(self, lines):
         self.lineList = lines
+
+    def update(self, triangle):
+        if triangle.child != None:
+            children = []
+            triangle.child.getChildren(children)
+            if self.start_triangle_child_count != len(children):
+                self.blockList = children
+                self.start_triangle_child_count = len(children)
+        else:
+            self.blockList = []
+            self.start_triangle_child_count = 0

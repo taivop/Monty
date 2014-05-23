@@ -35,6 +35,11 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         blockimg = self.image
         screen.blit(blockimg,(self.pos))
 
+    def getChildren(self, list):
+        list.append(self)
+        if self.hasChild():
+            self.child.getChildren(list)
+
 class AssignBlock(Block):
     """ Class for assignment statements. Tested for x = 1, y = x+5, z = x+y (and analogous assignments)
     """
