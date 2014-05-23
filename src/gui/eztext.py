@@ -6,17 +6,19 @@ class Textbox():
     def __init__(self, integerBox=False):
         #self.color = (255,255,255)
         if integerBox:
-            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='0123456789')
+            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='0123456789*(') # * on (, ( on )
         else:
-            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-        self.boxColor = (0,0,0)
+            self.txtbx = Input(maxlength=5, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*(')
+        self.borderColor = (0,0,0)
+        #self.rectColor = (100,100,100)
 
 
     def Render(self, screen, x, y, width, height):
         self.txtbx.set_pos(x+2, y+1)
         self.txtbx.draw(screen)
         self.ristkylik1 = pygame.Rect(x, y, width, height)
-        pygame.draw.rect(screen, self.boxColor, self.ristkylik1, 3)
+        pygame.draw.rect(screen, self.borderColor, self.ristkylik1, 2)
+        #pygame.draw.rect(screen, self.rectColor, self.ristkylik1)
 
     def Update(self, event):
         self.txtbx.update(event)
@@ -157,8 +159,8 @@ class Input:
                 elif event.key == K_5 and '%' in self.restricted: self.value += '%'
                 elif event.key == K_6 and '^' in self.restricted: self.value += '^'
                 elif event.key == K_7 and '&' in self.restricted: self.value += '&'
-                elif event.key == K_8 and '*' in self.restricted: self.value += '*'
-                elif event.key == K_9 and '(' in self.restricted: self.value += '('
+                elif event.key == K_8 and '*' in self.restricted: self.value += '('
+                elif event.key == K_9 and '(' in self.restricted: self.value += ')'
                 elif event.key == K_BACKQUOTE and '~' in self.restricted: self.value += '~'
                 elif event.key == K_MINUS and '_' in self.restricted: self.value += '_'
                 elif event.key == K_EQUALS and '+' in self.restricted: self.value += '+'

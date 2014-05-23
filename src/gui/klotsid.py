@@ -123,12 +123,12 @@ def main(): # Where we start
                 if mouseIsOn(item, pos):            # inside the bounding box
                     Target=item                     # "pick up" item
                     if targettext != None:
-                        targettext.boxColor = (0,0,0)
+                        targettext.borderColor = (0,0,0)
                     if pos[0] < item.pos[0] + item.width/2:
                         targettext=Target.textbox
                     else:
                         targettext=Target.textbox2
-                    targettext.boxColor = (255,255,255)
+                    targettext.borderColor = (255,255,255)
 
 
             for item in other_group:

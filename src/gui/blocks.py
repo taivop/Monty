@@ -20,7 +20,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.child = None
         self.parent = None
         self.textbox = Textbox()
-        self.textbox2= Textbox(True)
+        self.textbox2= Textbox()
         self.deltax=0
         self.deltay=0
 
@@ -41,7 +41,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
         #Operator
         font = pygame.font.Font(None, 30)
-        text = font.render("=",1,(255,255,255))
+        text = font.render("=",1,(0,0,0))
         screen.blit(text, (self.pos[0]+70,self.pos[1]+10))
 
         #Textbox
