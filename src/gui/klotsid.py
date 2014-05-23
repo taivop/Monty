@@ -102,8 +102,16 @@ def main(): # Where we start
 
     assignButton = AssignButton(500, 40)
     printButton = PrintButton(500, 70)
+    forwardButton = ForwardButton(500, 100)
+    leftButton = LeftButton(500, 130)
+    rightButton = RightButton(500, 160)
+    ifButton = IfButton(500, 190)
     button_group.add(assignButton)
     button_group.add(printButton)
+    button_group.add(forwardButton)
+    button_group.add(leftButton)
+    button_group.add(rightButton)
+    button_group.add(ifButton)
 
     while running:
         

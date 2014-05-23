@@ -19,8 +19,6 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.height = 40
         self.child = None
         self.parent = None
-        self.textbox = None
-        self.textbox2= None
         self.deltax=0
         self.deltay=0
 
@@ -40,38 +38,51 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         if self.hasChild():
             self.child.getChildren(list)
 
-class AssignBlock(Block):
-    """ Class for assignment statements. Tested for x = 1, y = x+5, z = x+y (and analogous assignments)
-    """
-    var_name = None
-    value = None
-    text = None
-    def __init__(self, pos):
-        super().__init__(pos, "block1.png")
-        self.var_name = "Default"
-        self.value = "Default"
-        self.textbox = Textbox(7)
-        self.textbox2 = Textbox(7)
-
-    def getAstNode(self):
-        # TODO: handle error if not a legal assignment
-        # TODO: security risk if var_name or value contains unwanted code => should sanitise/restrict input!
-        (tree, error) = AstHandler.codeToAst(self.getText())
-
-        return tree.body[0]
-
-    def makeText(self):
-        # create code corresponding to this block
-        self.var_name = self.textbox.getValue()
-        self.value = self.textbox2.getValue()
-        self.text = "{0} = {1}".format(self.var_name, self.value)
-
     def getText(self):
         # get the code corresponding to this block
         self.makeText()
         return self.text
 
+
         return node
+
+class OneBoxBlock(Block):
+    def __init__(self, pos, path, codeboxString, blockString, boxLength):
+        super().__init__(pos, path)
+        self.textbox = None
+        self.textbox2= None
+        self.textbox = Textbox(boxLength)
+        self.codeboxString = codeboxString
+        self.blockString = blockString
+
+    def makeText(self):
+        # create code corresponding to this block
+        expression = self.textbox.getValue()
+        self.text = self.codeboxString.format(expression)
+
+
+    def Render(self, screen):
+        super().Render(screen)
+        #Operator
+        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
+        text = font.render(self.blockString,1,(0,0,0))
+        screen.blit(text, (self.pos[0]+2,self.pos[1]+7))
+        self.textbox.Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)
+
+class TwoBoxBlock(Block):
+    def __init__(self, pos, path, codeboxString, blockString, boxLength1, boxLength2):
+        super().__init__(pos, path)
+        self.textbox = Textbox(boxLength1)
+        self.textbox2 = Textbox(boxLength2)
+        self.codeboxString = codeboxString
+        self.blockString = blockString
+
+    def makeText(self):
+        # create code corresponding to this block
+        var_name = self.textbox.getValue()
+        value = self.textbox2.getValue()
+        self.text = self.codeboxString.format(var_name, value)
+
 
     def Render(self, screen):
         super().Render(screen)
@@ -80,23 +91,33 @@ class AssignBlock(Block):
 
         #Operator
         font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 25)
-        text = font.render("=",1,(0,0,0))
-        screen.blit(text, (self.pos[0]+89,self.pos[1]+10))
+        text = font.render(self.blockString,1,(0,0,0))
+        screen.blit(text, (self.pos[0]+89,self.pos[1]+5))
 
         #Textbox
         self.textbox2.Render(screen, self.pos[0]+104,self.pos[1]+12,84,20)
 
 
+class AssignBlock(TwoBoxBlock):
+    """ Class for assignment statements. Tested for x = 1, y = x+5, z = x+y (and analogous assignments)
+    """
+    def __init__(self, pos):
+        super().__init__(pos, "block1.png", "{0} = {1}", "=", 7, 7)
 
 
-class PrintBlock(Block):
+    def getAstNode(self):
+        # TODO: handle error if not a legal assignment
+        # TODO: security risk if var_name or value contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+
+        return tree.body[0]
+
+
+class PrintBlock(OneBoxBlock):
     """ Class for print statements, e.g. print(x). Tested for print(x), print(x+5) (and analogous prints)
     """
-    expression = None
     def __init__(self, pos):
-        super().__init__(pos, "block2.png")
-        self.expression = "Default"
-        self.textbox = Textbox(12)
+        super().__init__(pos, "block2.png", "print({0})", "Trüki", 12)
 
     def getAstNode(self):
         # TODO: handle error if not a legal print
@@ -105,24 +126,38 @@ class PrintBlock(Block):
 
         return tree.body[0]
 
+class ForwardBlock(OneBoxBlock):
+    def __init__(self, pos):
+        super().__init__(pos, "block3.png", "fd({0})", "Edasi", 12)
 
-    def makeText(self):
-        # create code corresponding to this block
-        self.expression = self.textbox.getValue()
-        self.text = "print({0})".format(self.expression)
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
 
-    def getText(self):
-        # get the code corresponding to this block
-        self.makeText()
-        return self.text
+class LeftBlock(OneBoxBlock):
+    def __init__(self, pos):
+        super().__init__(pos, "block3.png", "lt({0})", "Vasak", 12)
 
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
 
-        return node
+class RightBlock(OneBoxBlock):
+    def __init__(self, pos):
+        super().__init__(pos, "block3.png", "rt({0})", "Parem", 12)
 
-    def Render(self, screen):
-        super().Render(screen)
-        #Operator
-        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
-        text = font.render("Print",1,(0,0,0))
-        screen.blit(text, (self.pos[0]+2,self.pos[1]+12))
-        self.textbox.Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class IfBlock(OneBoxBlock):
+    def __init__(self, pos):
+        super().__init__(pos, "block3.png", "if {0}", "Juhul kui", 12)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
