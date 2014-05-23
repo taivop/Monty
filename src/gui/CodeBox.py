@@ -11,8 +11,8 @@ class CodeBox(pygame.sprite.Sprite):
     width = 200                 # width of codebox
     height = 800                # height of codebox
 
-    top_padding = 40            # top-padding of first line of text
-    left_padding = 10           # left-padding of every line of text
+    top_padding = 60            # top-padding of first line of text
+    left_padding = 20           # left-padding of every line of text
     line_height = 30            # height of each line of text
 
     rect = pygame.Rect(x, y, width, height)
@@ -25,7 +25,7 @@ class CodeBox(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.SysFont("Courier New", 20)
-        self.title_font = pygame.font.SysFont("Arial Bold", 30)
+        self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 26)
 
 
     def Render(self,screen):

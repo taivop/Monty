@@ -5,7 +5,7 @@ class BlockButton(pygame.sprite.Sprite):
 
     def __init__(self, string, x, y): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
-        self.font = pygame.font.SysFont("Courier", 18,bold=True)
+        self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
         self.color = (0,0,0)
         self.borderColor = (0,0,0)
         self.text = self.font.render(string, 1, self.color)

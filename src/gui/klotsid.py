@@ -92,7 +92,7 @@ def main(): # Where we start
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
     button_group = pygame.sprite.Group()
 
-    triangle=StartTriangle((0,255,0),[11,0], 20,9) # create a new one
+    triangle=StartTriangle((0,255,0),[10,0], 20,9) # create a new one
     other_group.add(triangle) # add to list of things to draw
 
     codebox = CodeBox()

@@ -74,7 +74,7 @@ class AssignBlock(Block):
         self.textbox.Render(screen, self.pos[0]+2,self.pos[1]+12,84,20)
 
         #Operator
-        font = pygame.font.Font(None, 30)
+        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 25)
         text = font.render("=",1,(0,0,0))
         screen.blit(text, (self.pos[0]+89,self.pos[1]+10))
 
@@ -117,7 +117,7 @@ class PrintBlock(Block):
     def Render(self, screen):
         super().Render(screen)
         #Operator
-        font = pygame.font.SysFont("Courier", 18, bold=True)
+        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
         text = font.render("Print",1,(0,0,0))
         screen.blit(text, (self.pos[0]+2,self.pos[1]+12))
         self.textbox.Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)
