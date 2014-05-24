@@ -10,7 +10,7 @@ class BlockButton(pygame.sprite.Sprite):
         self.borderColor = (0,0,0)
         self.text = self.font.render(string, 1, self.color)
         self.rect = self.text.get_rect()
-        self.rect.width = 70
+        self.rect.width = 90
         self.rect.height = 25
         self.width = self.rect.width
         self.height = self.rect.height
@@ -45,21 +45,21 @@ class ForwardButton(BlockButton):
 
 class LeftButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Vasak", x, y)
+        super().__init__("Vasakule", x, y)
 
     def newBlocks(self):
         return [LeftBlock((self.pos[0]-210, self.pos[1]))]
 
 class RightButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Parem", x, y)
+        super().__init__("Paremale", x, y)
 
     def newBlocks(self):
         return [RightBlock((self.pos[0]-210, self.pos[1]))]
 
 class IfButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Juhul kui", x, y)
+        super().__init__("Tingimus", x, y)
 
     def newBlocks(self):
         return [IfBlock((self.pos[0]-210, self.pos[1])),

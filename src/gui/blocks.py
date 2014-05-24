@@ -210,7 +210,7 @@ class RightBlock(OneBoxBlock):
 
 class IfBlock(OneBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block4.png", "if {0}:", "Juhul kui", 12, moveRight=18)
+        super().__init__(pos, "block4.png", "if {0}", "Juhul kui", 12, moveRight=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
