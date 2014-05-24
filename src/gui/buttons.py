@@ -43,6 +43,13 @@ class ForwardButton(BlockButton):
     def newBlocks(self):
         return [ForwardBlock((self.pos[0]-210, self.pos[1]))]
 
+class BackButton(BlockButton):
+    def __init__(self, x, y):
+        super().__init__("Tagasi", x, y)
+
+    def newBlocks(self):
+        return [BackBlock((self.pos[0]-210, self.pos[1]))]
+
 class LeftButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Vasakule", x, y)
@@ -64,3 +71,11 @@ class IfButton(BlockButton):
     def newBlocks(self):
         return [IfBlock((self.pos[0]-210, self.pos[1])),
                 EndIfBlock((self.pos[0]-210, self.pos[1]+30))]
+
+class WhileButton(BlockButton):
+    def __init__(self, x, y):
+        super().__init__("Kordus", x, y)
+
+    def newBlocks(self):
+        return [WhileBlock((self.pos[0]-210, self.pos[1])),
+                EndWhileBlock((self.pos[0]-210, self.pos[1]+30))]

@@ -133,6 +133,8 @@ class TextboxElement(BlockElement):
         super().__init__(item)
         if self.info == "ifbox":
             self.pointer = Textbox(self.value, ifbox=True)
+        elif self.info == "varbox":
+            self.pointer = Textbox(self.value, varbox=True)
         else:
             self.pointer = Textbox(self.value)
 
@@ -155,7 +157,7 @@ class AssignBlock(Block):
     """ Class for assignment statements. Tested for x = 1, y = x+5, z = x+y (and analogous assignments)
     """
     def __init__(self, pos):
-        list = BlockElementList(((7,2,12),(7,104,12), ("=",89,8)))
+        list = BlockElementList(((7,2,12, "varbox"),(7,104,12), ("=",89,8)))
         super().__init__(pos, "block1.png", "{0} = {1}", list)
 
 
@@ -185,6 +187,16 @@ class ForwardBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((12,60,10),("Edasi",2,7)))
         super().__init__(pos, "block3.png", "fd({0})", list)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class BackBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList(((12,60,10),("Tagasi",2,7)))
+        super().__init__(pos, "block3.png", "bk({0})", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -222,6 +234,26 @@ class IfBlock(Block):
         return tree.body[0]
 
 class EndIfBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList((("Kui ei, jätkame siit",2,7),))
+        super().__init__(pos, "block5.png", "", list, move_left=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class WhileBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList((("Kas",2,7),(12,40,10,"ifbox"),("?",185,7)))
+        super().__init__(pos, "block4.png", "while {0}:", list, move_right=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class EndWhileBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Kui ei, jätkame siit",2,7),))
         super().__init__(pos, "block5.png", "", list, move_left=18)

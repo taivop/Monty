@@ -47,7 +47,6 @@ def setTargettext(targettext, item,  pos):
     count = len(item.elements.textboxes)
     if count != 0:
         result =  item.elements.getTextbox(pos//(int(item.width/count)))
-        #targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))].getElement()
         #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
         result.borderColor = (255,255,255)
     else:
@@ -87,18 +86,25 @@ def main(): # Where we start
     # Create run button
     runbutton = RunButton()
 
-    assignButton = AssignButton(500, 40)
-    printButton = PrintButton(500, 70)
-    forwardButton = ForwardButton(500, 100)
-    leftButton = LeftButton(500, 130)
-    rightButton = RightButton(500, 160)
-    ifButton = IfButton(500, 190)
+    button_x = 600
+    assignButton = AssignButton(button_x, 40)
+    printButton = PrintButton(button_x, 70)
+    ifButton = IfButton(button_x, 100)
+    whileButton = WhileButton(button_x, 130)
+
+    forwardButton = ForwardButton(button_x, 200)
+    backButton = BackButton(button_x, 230)
+    leftButton = LeftButton(button_x, 260)
+    rightButton = RightButton(button_x, 290)
+
     button_group.add(assignButton)
     button_group.add(printButton)
     button_group.add(forwardButton)
     button_group.add(leftButton)
     button_group.add(rightButton)
     button_group.add(ifButton)
+    button_group.add(whileButton)
+    button_group.add(backButton)
 
     while running:
         
@@ -126,7 +132,6 @@ def main(): # Where we start
                     Target=item                     # "pick up" item
                     if targettext != None:
                         targettext.borderColor = (0,0,0)
-                    count = len(item.elements.textboxes)
                     targettext = setTargettext(targettext, item, (pos[0]-item.pos[0]))
 
 
@@ -147,8 +152,9 @@ def main(): # Where we start
             if Target is None and targetbutton != None:  # didn't click on a block or other object
                 new_blocks=targetbutton.newBlocks()
                 for item in new_blocks:
-                    Target = item
-                    block_group.add(Target)
+                    block_group.add(item)
+                    item.connect(new_blocks)
+                Target = new_blocks[0]
                 targetbutton = None
                 targettext = setTargettext(targettext, Target, 0)
 
@@ -177,10 +183,14 @@ def main(): # Where we start
             Target=None # Drop item, if we have any
 
 
-        if event.type == KEYUP:
+        if event.type == KEYDOWN:
             if event.key == K_DELETE:
-                disconnectBlocks(last_target)
-                last_target.remove(block_group)
+                if last_target != None:
+                    disconnectBlocks(last_target)
+                    last_target.remove(block_group)
+                    codebox.update(triangle)
+            if event.key == K_RETURN:
+                runbox.updateRunResult()
 
 
         # RENDERING

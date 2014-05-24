@@ -3,13 +3,13 @@ from pygame.locals import *
 import pygame, string
 
 class Textbox():
-    def __init__(self, length, integerBox=False, ifbox=False):
+    def __init__(self, length, varbox=False, ifbox=False):
         self.length = length
         self.height = 20
-        if integerBox:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!<>', ifbox=ifbox)
+        if varbox:
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', info='varbox')
         else:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>', ifbox=ifbox)
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>"\'', info='ifbox')
         self.borderColor = (0,0,0)
 
 
@@ -45,7 +45,7 @@ class Input:
         """ Options: x, y, font, color, restricted, maxlength, prompt """
         self.options = Config(options, ['x', '0'], ['y', '0'], ['font', 'pygame.font.SysFont("Courier", 18,bold=True)'],
                               ['color', '(0,0,0)'], ['restricted', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'],
-                              ['maxlength', '-1'], ['prompt', '\'\''], ['ifbox', False])
+                              ['maxlength', '-1'], ['prompt', '\'\''], ['info', '\'\''])
         self.x = self.options.x; self.y = self.options.y
         self.font = self.options.font
         self.color = self.options.color
@@ -53,7 +53,7 @@ class Input:
         self.maxlength = self.options.maxlength
         self.prompt = self.options.prompt; self.value = ''
         self.shifted = False
-        self.ifbox = self.options.ifbox
+        self.info = self.options.info
 
     def set_pos(self, x, y):
         """ Set the position to x, y """
@@ -75,10 +75,10 @@ class Input:
         if event.type == KEYUP:
             if event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = False
         if event.type == KEYDOWN:
-            if event.key == K_BACKSPACE and len(self.value) > 0 and self.value[len(self.value)-1]=='=' and self.ifbox: self.value = self.value[:-2]
+            if event.key == K_BACKSPACE and len(self.value) > 0 and self.value[len(self.value)-1]=='=' and self.info == "ifbox": self.value = self.value[:-2]
             elif event.key == K_BACKSPACE: self.value = self.value[:-1]
             elif event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = True
-            elif event.key == K_SPACE: self.value += ' '
+            elif event.key == K_SPACE and not self.info == "varbox": self.value += ' '
             char = event.unicode
             if char == '+' and '+' in self.restricted: self.value += '+'
             elif char == '-' and '-' in self.restricted: self.value += '-'
@@ -87,10 +87,12 @@ class Input:
             elif char == '*' and '*' in self.restricted: self.value += '*'
             elif char == '/' and '/' in self.restricted: self.value += '/'
             elif char == '!' and '!' in self.restricted: self.value += '!'
-            elif char == '=' and '=' in self.restricted and self.ifbox: self.value += '=='
+            elif char == '=' and '=' in self.restricted and self.info == "ifbox": self.value += '=='
             elif char == '=' and '=' in self.restricted: self.value += '='
             elif char == '<' and '<' in self.restricted: self.value += '<'
             elif char == '>' and '>' in self.restricted: self.value += '>'
+            elif char == '"' and '"' in self.restricted: self.value += '"'
+            elif char == '\'' and '\'' in self.restricted: self.value += '\''
             if not self.shifted:
                 if event.key == K_a and 'a' in self.restricted: self.value += 'a'
                 elif event.key == K_b and 'b' in self.restricted: self.value += 'b'
