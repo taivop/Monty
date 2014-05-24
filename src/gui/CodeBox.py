@@ -98,7 +98,7 @@ class RunBox(pygame.sprite.Sprite):
 
     coderunner = None
     run_output = ""
-    run_errors = ""
+    run_error = ""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -126,7 +126,8 @@ class RunBox(pygame.sprite.Sprite):
 
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
-        self.run_errors = result[1]
+        self.run_error = result[1]
+        print(self.run_error)
 
 
 
@@ -141,13 +142,20 @@ class RunBox(pygame.sprite.Sprite):
         blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+5))
         DebugHelper.drawDebugRect(blit, screen)
 
-        # Output
-        lines = self.run_output.split('\n')
-        for i in range(0, len(lines)):
-            line = lines[i]
-            label_obj = self.font.render(line, 1, (0, 0, 0))
-            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+        if self.run_error is None:
+            # No error -> show program output
+            lines = self.run_output.split('\n')
+            for i in range(0, len(lines)):
+                line = lines[i]
+                label_obj = self.font.render(line, 1, (0, 0, 0))
+                blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+                DebugHelper.drawDebugRect(blit, screen)
+        else:
+            # Error -> show error
+            label_obj = self.font.render(self.run_error, 1, (255, 0, 0))
+            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding))
             DebugHelper.drawDebugRect(blit, screen)
+
 
         # Errors
 
