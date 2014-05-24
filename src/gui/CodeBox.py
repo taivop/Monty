@@ -59,9 +59,9 @@ class CodeBox(pygame.sprite.Sprite):
         indent = 0
         for block in self.blockList:
             self.lineList.append(indent * "  " + block.getText())
-            if block.__class__.__name__ == "IfBlock":
+            if block.__class__.__name__ == "IfBlock" or block.__class__.__name__ == "WhileBlock":
                 indent += 1
-            elif block.__class__.__name__ == "EndIfBlock":
+            elif block.__class__.__name__ == "EndIfBlock" or block.__class__.__name__ == "EndWhileBlock" :
                 indent -= 1
 
     def update(self, triangle):
