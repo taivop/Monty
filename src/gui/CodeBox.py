@@ -100,6 +100,10 @@ class RunBox(pygame.sprite.Sprite):
     run_output = ""
     run_error = ""
 
+    errorExplanations = {
+        "SyntaxError":  "Süntaksi viga"
+    }
+
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.SysFont("Courier New", 18)
@@ -152,7 +156,14 @@ class RunBox(pygame.sprite.Sprite):
                 DebugHelper.drawDebugRect(blit, screen)
         else:
             # Error -> show error
-            label_obj = self.font.render(self.run_error, 1, (255, 0, 0))
+            rawErrorText = self.run_error
+
+            displayedErrorText = rawErrorText
+            # If we have a translation/explanation for the error, show it
+            if rawErrorText in self.errorExplanations:
+                displayedErrorText = self.errorExplanations[rawErrorText]
+
+            label_obj = self.font.render(displayedErrorText, 1, (255, 0, 0))
             blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding))
             DebugHelper.drawDebugRect(blit, screen)
 
