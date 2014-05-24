@@ -1,7 +1,7 @@
 import pygame
 from gui.DebugHelper import DebugHelper
 from gui.blocks import *
-from language.coderunner import CodeRunner
+from language.CodeRunner import CodeRunner
 
 
 class CodeBox(pygame.sprite.Sprite):
