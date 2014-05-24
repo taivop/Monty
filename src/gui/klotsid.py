@@ -41,6 +41,18 @@ def bringTargetToFront(target,group): # bringing the selected block and its chil
     if target.hasChild():
         bringTargetToFront(target.child,group)
     
+def setTargettext(targettext, item,  pos):
+    if targettext != None:
+        targettext.borderColor = (0,0,0)
+    count = len(item.elements.textboxes)
+    if count != 0:
+        result =  item.elements.getTextbox(pos//(int(item.width/count)))
+        #targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))].getElement()
+        #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
+        result.borderColor = (255,255,255)
+    else:
+        result = None
+    return result
 
 def main(): # Where we start
 
@@ -51,6 +63,7 @@ def main(): # Where we start
     MouseDown=False # mouse is held down
     MouseReleased=False # Released THIS FRAME
     Target=None # target of Drag/Drop
+    last_target=None
     targettext=None
     targetbutton=None
 
@@ -109,14 +122,8 @@ def main(): # Where we start
                     Target=item                     # "pick up" item
                     if targettext != None:
                         targettext.borderColor = (0,0,0)
-                    textboxes = item.elements.textboxes
-                    count = len(textboxes)
-                    if count != 0:
-                        targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))].getElement()
-                        #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
-                        targettext.borderColor = (255,255,255)
-                    else:
-                        targettext = None
+                    count = len(item.elements.textboxes)
+                    targettext = setTargettext(targettext, item, (pos[0]-item.pos[0]))
 
 
             #for item in other_group:
@@ -135,6 +142,7 @@ def main(): # Where we start
                     Target = item
                     block_group.add(Target)
                 targetbutton = None
+                targettext = setTargettext(targettext, Target, 0)
 
 
 
@@ -157,21 +165,24 @@ def main(): # Where we start
             Target.connect(block_group)
             connectToStart(Target, triangle)
             codebox.update(triangle)
-
+            last_target = Target
             Target=None # Drop item, if we have any
+
 
         if event.type == KEYUP:
             if event.key == K_DELETE:
-                targettext
+                disconnectBlocks(last_target)
+                last_target.remove(block_group)
+
 
         # RENDERING
 
         for item in block_group:
             item.Render(screen) # Draw all items
-            textboxes = item.elements.textboxes
-            for box in textboxes:
-                if targettext == box.getElement():
-                    box.getElement().Update(event)
+            for i in range(len(item.elements.textboxes)):
+                box = item.elements.getTextbox(i)
+                if targettext == box:
+                    box.Update(event)
                     break
 
 
