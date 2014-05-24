@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(".."))
 
 from gui.StartTriangle import StartTriangle
 from gui.blocks import Block
-from gui.CodeBox import CodeBox
+from gui.CodeBox import CodeBox, RunBox
 from gui.buttons import *
 
 
@@ -44,7 +44,7 @@ def bringTargetToFront(target,group): # bringing the selected block and its chil
 def main(): # Where we start
 
     pygame.init()
-    screen=pygame.display.set_mode((800,600))
+    screen=pygame.display.set_mode((1000,600))
     running=True
     MousePressed=False # Pressed down THIS FRAME
     MouseDown=False # mouse is held down
@@ -60,9 +60,14 @@ def main(): # Where we start
     triangle=StartTriangle((0,255,0),[10,0], 20,9) # create a new one
     other_group.add(triangle) # add to list of things to draw
 
+    runbox = RunBox()
+    other_group.add(runbox)
+
     codebox = CodeBox()
     #codebox.setLineList(["foo = bar()", "print(moot)", "a line of code"])
     other_group.add(codebox)
+
+    runbox.codebox = codebox
 
     assignButton = AssignButton(500, 40)
     printButton = PrintButton(500, 70)
