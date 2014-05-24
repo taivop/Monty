@@ -97,8 +97,8 @@ class RunBox(pygame.sprite.Sprite):
     title_font = None
 
     coderunner = None
-    run_output = None
-    run_errors = None
+    run_output = ""
+    run_errors = ""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -109,8 +109,9 @@ class RunBox(pygame.sprite.Sprite):
     def updateRunResult(self):
         # Get program text
         programText = ""
+        programText += "from turtle import *\nexitonclick()\n"
         for line in self.codebox.lineList:
-            programText.append(line + "\n")
+            programText += line + "\n"
 
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
@@ -128,3 +129,35 @@ class RunBox(pygame.sprite.Sprite):
         label_obj = self.title_font.render("Väljund:", 1, (0, 0, 0))
         blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+5))
         DebugHelper.drawDebugRect(blit, screen)
+
+        # Output
+        lines = self.run_output.split('\n')
+        for i in range(0, len(lines)):
+            line = lines[i]
+            label_obj = self.font.render(line, 1, (0, 0, 0))
+            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+            DebugHelper.drawDebugRect(blit, screen)
+
+        # Errors
+
+
+class RunButton(pygame.sprite.Sprite):
+
+    def __init__(self): # initialze the properties of the object
+        pygame.sprite.Sprite.__init__(self)
+        self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
+        self.color = (255,255,255)
+        self.borderColor = (0,0,0)
+        self.text = self.font.render("Käivita!", 1, self.color)
+        self.rect = self.text.get_rect()
+        self.rect.width = 75
+        self.rect.height = 30
+        self.width = self.rect.width
+        self.height = self.rect.height
+        self.pos = (RunBox.x+220,RunBox.y+12)
+        self.rect.x = self.pos[0]-5
+        self.rect.y = self.pos[1]-2
+
+    def Render(self, screen):
+        rect = pygame.draw.rect(screen, self.borderColor, self.rect, 0)
+        blit = screen.blit(self.text, (self.pos[0], self.pos[1]))

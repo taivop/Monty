@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(".."))
 
 from gui.StartTriangle import StartTriangle
 from gui.blocks import Block
-from gui.CodeBox import CodeBox, RunBox
+from gui.CodeBox import *
 from gui.buttons import *
 
 
@@ -74,6 +74,7 @@ def main(): # Where we start
     triangle=StartTriangle((0,255,0),[10,0], 20,9) # create a new one
     other_group.add(triangle) # add to list of things to draw
 
+    # Create run box and code box
     runbox = RunBox()
     other_group.add(runbox)
 
@@ -82,6 +83,9 @@ def main(): # Where we start
     other_group.add(codebox)
 
     runbox.codebox = codebox
+
+    # Create run button
+    runbutton = RunButton()
 
     assignButton = AssignButton(500, 40)
     printButton = PrintButton(500, 70)
@@ -134,6 +138,10 @@ def main(): # Where we start
                 if mouseIsOn(item, pos):
                     targetbutton = item
                     break
+
+            # if run button was pressed:
+            if mouseIsOn(runbutton, pos):
+                runbox.updateRunResult()
 
             
             if Target is None and targetbutton != None:  # didn't click on a block or other object
@@ -192,6 +200,7 @@ def main(): # Where we start
         for item in button_group:
             item.Render(screen)
 
+        runbutton.Render(screen)
             
         pygame.display.flip()
 
