@@ -8,22 +8,6 @@ from gui.CodeBox import CodeBox
 from gui.buttons import *
 
 
-def connectBlocks(blockone, blocktwo):
-    if blockone.pos[1]<blocktwo.pos[1]:
-        upperblock = blockone
-        bottomblock = blocktwo
-    else:
-        upperblock = blocktwo
-        bottomblock = blockone
-
-    if upperblock.hasChild() or bottomblock.hasParent():
-        return
-    upperblock.child = bottomblock
-    bottomblock.parent = upperblock
-    moveChildren(upperblock,upperblock.pos)
-
-    print("connected blocks")
-
 def disconnectBlocks(block):
     if block.hasParent():
         block.parent.child = None
@@ -38,26 +22,6 @@ def mouseIsOn(item, mouse_pos):
         return True
     return False
 
-def moveChildren(target, pos, i=1):
-    if target.hasChild():
-        target.child.pos=pos[0],pos[1]+target.height*i
-        target.child.rect.x=pos[0]
-        target.child.rect.y=pos[1]+target.height*i
-        i+=1
-        moveChildren(target.child, pos, i)
-
-def connect(target, block_group, first = True):
-    if first:
-        for item in block_group:
-            if item != target and pygame.sprite.collide_rect(item,target):
-                connectBlocks(target, item)
-    if target.hasChild():
-        connect(target.child, block_group, False)
-    else:
-        for item in block_group:
-            if item != target and pygame.sprite.collide_rect(item,target):
-                connectBlocks(target, item)
-
 def connectToStart(target,triangle): # connecting to the start triangle
     if pygame.sprite.collide_rect(target,triangle):
         if not triangle.hasChild():
@@ -66,7 +30,7 @@ def connectToStart(target,triangle): # connecting to the start triangle
             target.pos = triangle.x-10, triangle.y
             target.rect.x, target.rect.y = target.pos
             print("connected to start")
-            moveChildren(target, target.pos)
+            target.moveChildren()
 
 
 def bringTargetToFront(target,group): # bringing the selected block and its children to front
@@ -139,14 +103,13 @@ def main(): # Where we start
                     Target=item                     # "pick up" item
                     if targettext != None:
                         targettext.borderColor = (0,0,0)
-                    if item.textbox != None and item.textbox2 != None:
-                        if pos[0] < item.pos[0] + item.width/2:
-                            targettext=Target.textbox
-                        else:
-                            targettext=Target.textbox2
-                    elif item.textbox != None:
-                        targettext=Target.textbox
-                    targettext.borderColor = (255,255,255)
+                    textboxes = item.getTextboxes()
+                    count = len(textboxes)
+                    if count != 0:
+                        targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))]
+                        #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
+
+                        targettext.borderColor = (255,255,255)
 
 
             #for item in other_group:
@@ -160,9 +123,12 @@ def main(): # Where we start
 
             
             if Target is None and targetbutton != None:  # didn't click on a block or other object
-                #Target=Block(pos)
-                Target=targetbutton.newBlock()
-                block_group.add(Target)                 # create a new block
+                new_blocks=targetbutton.newBlocks()
+                for item in new_blocks:
+                    Target = item
+                    block_group.add(Target)
+                targetbutton = None
+
 
 
             if Target is not None:
@@ -175,13 +141,13 @@ def main(): # Where we start
 
             Target.pos = pos[0]-Target.deltax, pos[1]-Target.deltay
             Target.rect.x, Target.rect.y = Target.pos
-            moveChildren(Target, Target.pos)
+            Target.moveChildren()
             bringTargetToFront(Target,block_group) # the blocks on the move are always on top
 
 
         if MouseReleased and Target is not None:
             disconnectBlocks(Target)
-            connect(Target, block_group)
+            Target.connect(block_group)
             connectToStart(Target, triangle)
             codebox.update(triangle)
 
@@ -191,10 +157,9 @@ def main(): # Where we start
 
         for item in block_group:
             item.Render(screen) # Draw all items
-            if item.textbox != None and targettext == item.textbox:
-                item.textbox.Update(event)
-            elif item.textbox2 != None and targettext == item.textbox2:
-                item.textbox2.Update(event)
+            textboxes = item.getTextboxes()
+            for box in textboxes:
+                box.Update(event)
 
 
         for item in other_group:

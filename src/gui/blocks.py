@@ -8,7 +8,7 @@ from gui.DebugHelper import DebugHelper
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
-    def __init__(self, pos, path): # initialze the properties of the object
+    def __init__(self, pos, path, moveRight, moveLeft): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.pos=pos
         self.image = pygame.image.load(path)
@@ -21,6 +21,12 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.parent = None
         self.deltax=0
         self.deltay=0
+        self.moveRight = moveRight
+        self.moveLeft = moveLeft
+        self.textboxes = []
+
+    def getTextboxes(self):
+        return self.textboxes
 
     def hasParent(self):
         return self.parent is not None
@@ -33,7 +39,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         blockimg = self.image
         screen.blit(blockimg,(self.pos))
 
-    def getChildren(self, list):
+    def getChildren(self, list): # Current block + Children
         list.append(self)
         if self.hasChild():
             self.child.getChildren(list)
@@ -46,48 +52,83 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
         return node
 
+    def connect(self, block_group):
+        children = []
+        self.getChildren(children)
+        lastChild = children[len(children)-1]
+        for item in block_group:
+            if item != self and pygame.sprite.collide_rect(item, self):
+                self.connectBlocks(item)
+            elif item != lastChild and pygame.sprite.collide_rect(item, lastChild):
+                lastChild.connectBlocks(item)
+
+    def connectBlocks(self, block):
+        if self.pos[1]<block.pos[1]:
+            upperblock = self
+            bottomblock = block
+        else:
+            upperblock = block
+            bottomblock = self
+
+        if upperblock.hasChild() or bottomblock.hasParent():
+            return
+        upperblock.child = bottomblock
+        bottomblock.parent = upperblock
+        upperblock.moveChildren()
+
+        print("connected blocks")
+
+    def moveChildren(self):
+        children = []
+        self.getChildren(children)
+        for i in range(1, len(children)):
+            child = children[i]
+            parent = children[i-1]
+            child.pos = parent.pos[0]+parent.moveRight-child.moveLeft, parent.pos[1]+parent.height
+            child.rect.x = parent.pos[0]+ parent.moveRight- child.moveLeft
+            child.rect.y = parent.pos[1]+parent.height
+
+
 class OneBoxBlock(Block):
-    def __init__(self, pos, path, codeboxString, blockString, boxLength):
-        super().__init__(pos, path)
-        self.textbox = None
-        self.textbox2= None
-        self.textbox = Textbox(boxLength)
+    def __init__(self, pos, path, codeboxString, blockString, boxLength, moveRight=0, moveLeft=0):
+        super().__init__(pos, path, moveRight, moveLeft)
+        self.textboxes.append(Textbox(boxLength))
         self.codeboxString = codeboxString
         self.blockString = blockString
 
     def makeText(self):
         # create code corresponding to this block
-        expression = self.textbox.getValue()
+        expression = self.textboxes[0].getValue()
         self.text = self.codeboxString.format(expression)
 
 
     def Render(self, screen):
         super().Render(screen)
-        #Operator
         font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
         text = font.render(self.blockString,1,(0,0,0))
         screen.blit(text, (self.pos[0]+2,self.pos[1]+7))
-        self.textbox.Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)
+        self.textboxes[0].Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)
+
 
 class TwoBoxBlock(Block):
-    def __init__(self, pos, path, codeboxString, blockString, boxLength1, boxLength2):
-        super().__init__(pos, path)
-        self.textbox = Textbox(boxLength1)
-        self.textbox2 = Textbox(boxLength2)
+    def __init__(self, pos, path, codeboxString, blockString, boxLength1, boxLength2, moveRight=0, moveLeft=0):
+        super().__init__(pos, path, moveRight, moveLeft)
+        self.textboxes.append(Textbox(boxLength1))
+        self.textboxes.append(Textbox(boxLength2))
         self.codeboxString = codeboxString
         self.blockString = blockString
 
     def makeText(self):
         # create code corresponding to this block
-        var_name = self.textbox.getValue()
-        value = self.textbox2.getValue()
+        var_name = self.textboxes[0].getValue()
+        value = self.textboxes[1].getValue()
         self.text = self.codeboxString.format(var_name, value)
 
 
     def Render(self, screen):
         super().Render(screen)
         #Textbox
-        self.textbox.Render(screen, self.pos[0]+2,self.pos[1]+12,84,20)
+        self.textboxes[0].Render(screen, self.pos[0]+2,self.pos[1]+12,84,20)
 
         #Operator
         font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 25)
@@ -95,7 +136,21 @@ class TwoBoxBlock(Block):
         screen.blit(text, (self.pos[0]+89,self.pos[1]+5))
 
         #Textbox
-        self.textbox2.Render(screen, self.pos[0]+104,self.pos[1]+12,84,20)
+        self.textboxes[1].Render(screen, self.pos[0]+104,self.pos[1]+12,84,20)
+
+class NoBoxBlock(Block):
+    def __init__(self, pos, path, codeboxString, blockString, moveRight=0, moveLeft=0):
+        super().__init__(pos, path, moveRight, moveLeft)
+        self.blockString = blockString
+
+    def Render(self, screen):
+        super().Render(screen)
+        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
+        text = font.render(self.blockString,1,(0,0,0))
+        screen.blit(text, (self.pos[0]+2,self.pos[1]+7))
+
+    def makeText(self):
+        self.text = ""
 
 
 class AssignBlock(TwoBoxBlock):
@@ -155,7 +210,16 @@ class RightBlock(OneBoxBlock):
 
 class IfBlock(OneBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block3.png", "if {0}", "Juhul kui", 12)
+        super().__init__(pos, "block4.png", "if {0}", "Juhul kui", 12, moveRight=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class EndIfBlock(NoBoxBlock):
+    def __init__(self, pos):
+        super().__init__(pos, "block5.png", "if {0}", "End if", moveLeft=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!

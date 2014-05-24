@@ -26,40 +26,41 @@ class AssignButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Omista",x ,y)
 
-    def newBlock(self):
-        return AssignBlock((self.pos[0]-210, self.pos[1]))
+    def newBlocks(self):
+        return [AssignBlock((self.pos[0]-210, self.pos[1]))]
 
 class PrintButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Trüki",x ,y)
 
-    def newBlock(self):
-        return PrintBlock((self.pos[0]-210, self.pos[1]))
+    def newBlocks(self):
+        return [PrintBlock((self.pos[0]-210, self.pos[1]))]
 
 class ForwardButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Edasi", x, y)
 
-    def newBlock(self):
-        return ForwardBlock((self.pos[0]-210, self.pos[1]))
+    def newBlocks(self):
+        return [ForwardBlock((self.pos[0]-210, self.pos[1]))]
 
 class LeftButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Vasak", x, y)
 
-    def newBlock(self):
-        return LeftBlock((self.pos[0]-210, self.pos[1]))
+    def newBlocks(self):
+        return [LeftBlock((self.pos[0]-210, self.pos[1]))]
 
 class RightButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Parem", x, y)
 
-    def newBlock(self):
-        return RightBlock((self.pos[0]-210, self.pos[1]))
+    def newBlocks(self):
+        return [RightBlock((self.pos[0]-210, self.pos[1]))]
 
 class IfButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Juhul kui", x, y)
 
-    def newBlock(self):
-        return IfBlock((self.pos[0]-210, self.pos[1]))
+    def newBlocks(self):
+        return [IfBlock((self.pos[0]-210, self.pos[1])),
+                EndIfBlock((self.pos[0]-210, self.pos[1]+30))]
