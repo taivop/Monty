@@ -8,7 +8,7 @@ from gui.DebugHelper import DebugHelper
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
-    def __init__(self, pos, path, moveRight, moveLeft): # initialze the properties of the object
+    def __init__(self, pos, path, moveRight, moveLeft, block_string): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.pos=pos
         self.image = pygame.image.load(path)
@@ -24,6 +24,8 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         self.moveRight = moveRight
         self.moveLeft = moveLeft
         self.textboxes = []
+        self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
+        self.title_text = self.title_font.render(block_string,1,(0,0,0))
 
     def getTextboxes(self):
         return self.textboxes
@@ -46,8 +48,7 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
     def getText(self):
         # get the code corresponding to this block
-        self.makeText()
-        return self.text
+        return self.makeText()
 
 
         return node
@@ -90,67 +91,65 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
 
 class OneBoxBlock(Block):
-    def __init__(self, pos, path, codeboxString, blockString, boxLength, moveRight=0, moveLeft=0):
-        super().__init__(pos, path, moveRight, moveLeft)
-        self.textboxes.append(Textbox(boxLength))
-        self.codeboxString = codeboxString
-        self.blockString = blockString
+    def __init__(self, pos, path, codebox_string, block_string, box_length, box_x, box_y, moveRight=0, moveLeft=0):
+        super().__init__(pos, path, moveRight, moveLeft, block_string)
+        self.textboxes.append(Textbox(box_length))
+        self.codebox_string = codebox_string
+        self.block_string = block_string
+        self.box_x = box_x
+        self.box_y = box_y
 
     def makeText(self):
         # create code corresponding to this block
         expression = self.textboxes[0].getValue()
-        self.text = self.codeboxString.format(expression)
+        return self.codebox_string.format(expression)
 
 
     def Render(self, screen):
         super().Render(screen)
-        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
-        text = font.render(self.blockString,1,(0,0,0))
-        screen.blit(text, (self.pos[0]+2,self.pos[1]+7))
-        self.textboxes[0].Render(screen, self.pos[0]+60,self.pos[1]+10,135,20)
+        screen.blit(self.title_text, (self.pos[0]+2,self.pos[1]+7))
+        self.textboxes[0].Render(screen, self.pos[0]+self.box_x, self.pos[1]+self.box_y)
 
 
 class TwoBoxBlock(Block):
-    def __init__(self, pos, path, codeboxString, blockString, boxLength1, boxLength2, moveRight=0, moveLeft=0):
-        super().__init__(pos, path, moveRight, moveLeft)
-        self.textboxes.append(Textbox(boxLength1))
-        self.textboxes.append(Textbox(boxLength2))
-        self.codeboxString = codeboxString
-        self.blockString = blockString
+    def __init__(self, pos, path, codebox_string, block_string, box_length1, box_length2, moveRight=0, moveLeft=0):
+        super().__init__(pos, path, moveRight, moveLeft, block_string)
+        self.textboxes.append(Textbox(box_length1))
+        self.textboxes.append(Textbox(box_length2))
+        self.codebox_string = codebox_string
+        self.block_string = block_string
+        #self.box_x = box_x
+        #self.box_y = box_y
 
     def makeText(self):
         # create code corresponding to this block
         var_name = self.textboxes[0].getValue()
         value = self.textboxes[1].getValue()
-        self.text = self.codeboxString.format(var_name, value)
+        return self.codebox_string.format(var_name, value)
 
 
     def Render(self, screen):
         super().Render(screen)
         #Textbox
-        self.textboxes[0].Render(screen, self.pos[0]+2,self.pos[1]+12,84,20)
+        self.textboxes[0].Render(screen, self.pos[0]+2,self.pos[1]+12)
 
         #Operator
-        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 25)
-        text = font.render(self.blockString,1,(0,0,0))
-        screen.blit(text, (self.pos[0]+89,self.pos[1]+5))
+        screen.blit(self.title_text, (self.pos[0]+89,self.pos[1]+5))
 
         #Textbox
-        self.textboxes[1].Render(screen, self.pos[0]+104,self.pos[1]+12,84,20)
+        self.textboxes[1].Render(screen, self.pos[0]+104,self.pos[1]+12)
 
 class NoBoxBlock(Block):
     def __init__(self, pos, path, codeboxString, blockString, moveRight=0, moveLeft=0):
-        super().__init__(pos, path, moveRight, moveLeft)
+        super().__init__(pos, path, moveRight, moveLeft, blockString)
         self.blockString = blockString
 
     def Render(self, screen):
         super().Render(screen)
-        font = self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
-        text = font.render(self.blockString,1,(0,0,0))
-        screen.blit(text, (self.pos[0]+2,self.pos[1]+7))
+        screen.blit(self.title_text, (self.pos[0]+2,self.pos[1]+7))
 
     def makeText(self):
-        self.text = ""
+        return ""
 
 
 class AssignBlock(TwoBoxBlock):
@@ -172,7 +171,7 @@ class PrintBlock(OneBoxBlock):
     """ Class for print statements, e.g. print(x). Tested for print(x), print(x+5) (and analogous prints)
     """
     def __init__(self, pos):
-        super().__init__(pos, "block2.png", "print({0})", "Trüki", 12)
+        super().__init__(pos, "block2.png", "print({0})", "Trüki", 12, 60, 10)
 
     def getAstNode(self):
         # TODO: handle error if not a legal print
@@ -183,7 +182,7 @@ class PrintBlock(OneBoxBlock):
 
 class ForwardBlock(OneBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block3.png", "fd({0})", "Edasi", 12)
+        super().__init__(pos, "block3.png", "fd({0})", "Edasi",12,60, 10)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -192,7 +191,7 @@ class ForwardBlock(OneBoxBlock):
 
 class LeftBlock(OneBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block3.png", "lt({0})", "Vasak", 12)
+        super().__init__(pos, "block3.png", "lt({0})", "Vasak",12, 60, 10)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -201,7 +200,7 @@ class LeftBlock(OneBoxBlock):
 
 class RightBlock(OneBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block3.png", "rt({0})", "Parem", 12)
+        super().__init__(pos, "block3.png", "rt({0})", "Parem", 12,60, 10)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -210,7 +209,7 @@ class RightBlock(OneBoxBlock):
 
 class IfBlock(OneBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block4.png", "if {0}", "Juhul kui", 12, moveRight=18)
+        super().__init__(pos, "block4.png", "if {0}:", "Kas", 12, 60, 10, moveRight=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -219,7 +218,7 @@ class IfBlock(OneBoxBlock):
 
 class EndIfBlock(NoBoxBlock):
     def __init__(self, pos):
-        super().__init__(pos, "block5.png", "if {0}", "End if", moveLeft=18)
+        super().__init__(pos, "block5.png", "", "Kui ei, jätkame siit", moveLeft=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!

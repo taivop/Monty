@@ -5,18 +5,20 @@ import pygame, string
 class Textbox():
     def __init__(self, length, integerBox=False):
         #self.color = (255,255,255)
+        self.length = length
+        self.height = 20
         if integerBox:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!') # * on (, ( on )
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!')
         else:
             self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!')
         self.borderColor = (0,0,0)
         #self.rectColor = (100,100,100)
 
 
-    def Render(self, screen, x, y, width, height):
+    def Render(self, screen, x, y):
         self.txtbx.set_pos(x+2, y+1)
         self.txtbx.draw(screen)
-        self.ristkylik1 = pygame.Rect(x, y, width, height)
+        self.ristkylik1 = pygame.Rect(x, y, int(self.length*11.5), self.height)
         pygame.draw.rect(screen, self.borderColor, self.ristkylik1, 2)
         #pygame.draw.rect(screen, self.rectColor, self.ristkylik1)
 

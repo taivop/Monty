@@ -159,7 +159,9 @@ def main(): # Where we start
             item.Render(screen) # Draw all items
             textboxes = item.getTextboxes()
             for box in textboxes:
-                box.Update(event)
+                if targettext == box:
+                    box.Update(event)
+                    break
 
 
         for item in other_group:
