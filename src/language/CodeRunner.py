@@ -42,18 +42,3 @@ class CodeRunner:
             print("EXCEPTION: " + e.__class__.__name__)
 
         return code_output.getvalue(), error
-
-
-
-# Test the class
-programm = """
-x = 3
-y = 4
-x+y
-print('printing stuff')
-#notafunction()
-"""
-
-runner = CodeRunner()
-results = runner.execute(programm)
-print(results)

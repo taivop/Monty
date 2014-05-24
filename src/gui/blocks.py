@@ -3,7 +3,7 @@ from random import randint # for testing purposes, random color of 3 on every bl
 
 import os
 from gui.eztext import Textbox
-from language.asthandler import AstHandler
+from language.AstHandler import AstHandler
 from gui.DebugHelper import DebugHelper
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate

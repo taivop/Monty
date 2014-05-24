@@ -30,7 +30,7 @@ exec(compile(root, "<test>", "exec"))
 
 # now do the same thing with the AstHandler class
 print('now using AstHandler')
-from language.asthandler import AstHandler
+from language.AstHandler import AstHandler
 
 blocks = [assign_block, print_block]
 root = AstHandler.blocksToAst(blocks)
