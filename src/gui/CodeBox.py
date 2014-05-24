@@ -98,7 +98,11 @@ class RunBox(pygame.sprite.Sprite):
 
     coderunner = None
     run_output = ""
-    run_errors = ""
+    run_error = ""
+
+    errorExplanations = {
+        "SyntaxError":  "Süntaksi viga"
+    }
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -109,13 +113,28 @@ class RunBox(pygame.sprite.Sprite):
     def updateRunResult(self):
         # Get program text
         programText = ""
-        programText += "from turtle import *\nexitonclick()\n"
+
+        # If we have any turtle statements, add turtle import
+        addTurtle = False
+        for block in self.codebox.blockList:
+            name = block.__class__.__name__
+            if name == "ForwardBlock" or name == "RightBlock" or name == "LeftBlock":
+                addTurtle = True
+
+        if addTurtle:
+            programText += "from turtle import *\n"
+
+        # Add all program lines
         for line in self.codebox.lineList:
             programText += line + "\n"
 
+        if addTurtle:
+            programText += "exitonclick()\n"
+
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
-        self.run_errors = result[1]
+        self.run_error = result[1]
+        print(self.run_error)
 
 
 
@@ -130,13 +149,27 @@ class RunBox(pygame.sprite.Sprite):
         blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+5))
         DebugHelper.drawDebugRect(blit, screen)
 
-        # Output
-        lines = self.run_output.split('\n')
-        for i in range(0, len(lines)):
-            line = lines[i]
-            label_obj = self.font.render(line, 1, (0, 0, 0))
-            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+        if self.run_error is None:
+            # No error -> show program output
+            lines = self.run_output.split('\n')
+            for i in range(0, len(lines)):
+                line = lines[i]
+                label_obj = self.font.render(line, 1, (0, 0, 0))
+                blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+i*self.line_height))
+                DebugHelper.drawDebugRect(blit, screen)
+        else:
+            # Error -> show error
+            rawErrorText = self.run_error
+
+            displayedErrorText = rawErrorText
+            # If we have a translation/explanation for the error, show it
+            if rawErrorText in self.errorExplanations:
+                displayedErrorText = self.errorExplanations[rawErrorText]
+
+            label_obj = self.font.render(displayedErrorText, 1, (255, 0, 0))
+            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding))
             DebugHelper.drawDebugRect(blit, screen)
+
 
         # Errors
 
