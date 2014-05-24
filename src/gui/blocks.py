@@ -111,8 +111,9 @@ class BlockElementList():
             result.append(item.getValue())
         return result
 
-    def getTextBox(self, i):
-        return self.textboxes[i]
+    def getTextbox(self, i):
+        if i >= 0 and i < len(self.textboxes):
+            return self.textboxes[i].pointer
 
 class BlockElement():
     def __init__(self, item):
