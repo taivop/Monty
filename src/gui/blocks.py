@@ -5,6 +5,7 @@ import os
 from gui.eztext import Textbox
 from language.AstHandler import AstHandler
 from gui.DebugHelper import DebugHelper
+from gui.StartTriangle import StartTriangle
 
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
@@ -94,6 +95,39 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
             child.pos = parent.pos[0]+parent.move_right-child.move_left, parent.pos[1]+parent.height
             child.rect.x = parent.pos[0]+ parent.move_right- child.move_left
             child.rect.y = parent.pos[1]+parent.height
+
+    def changeTextbox(self, targettext, anc=False): # eeldame, et textboxid tehti samas järjekorras, mis nad blocki peal on
+        boxes = self.elements.textboxes
+        for i in range(len(boxes)):
+            if self.elements.getTextbox(i) == targettext:
+                if i < len(boxes)-1:
+                    return self.elements.getTextbox(i+1), self
+        result, ite = self.rek()
+        if result != None:
+             return result, ite
+        else:
+            ancestors = []
+            self.getAncestors(ancestors)
+            first = ancestors[len(ancestors)-1]
+            #if isinstance(first, StartTriangle):
+            #    first = ancestors[len(ancestors)-2]
+            if len(first.elements.textboxes) != 0:
+                return first.elements.getTextbox(0), first
+            return first.rek()
+        return None, None
+
+    def rek(self):
+        if self.hasChild():
+            if len(self.child.elements.textboxes) != 0:
+                return self.child.elements.getTextbox(0), self.child
+            else:
+                return self.child.rek()
+        return None, None
+
+    def getAncestors(self, list):
+        list.append(self)
+        if self.hasParent() and not isinstance(self.parent, StartTriangle):
+            self.parent.getAncestors(list)
 
 class BlockElementList():
     def __init__(self, list):
@@ -255,7 +289,7 @@ class WhileBlock(Block):
 
 class EndWhileBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Kui ei, jätkame siit",2,7),))
+        list = BlockElementList((("Kui jah, kordame",2,7),))
         super().__init__(pos, "block5.png", "", list, move_left=18)
 
     def getAstNode(self):

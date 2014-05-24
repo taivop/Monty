@@ -2,8 +2,8 @@ import pygame
 from pygame.locals import *
 from gui.blocks import *
 __author__ = 'Anti'
-class BlockButton(pygame.sprite.Sprite):
 
+class Button(pygame.sprite.Sprite):
     def __init__(self, string, x, y): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
@@ -23,6 +23,58 @@ class BlockButton(pygame.sprite.Sprite):
     def Render(self, screen):
         screen.blit(self.text, (self.pos[0], self.pos[1]))
         pygame.draw.rect(screen, self.borderColor, self.rect, 2)
+
+class BlockButton(Button):
+    def __init__(self, string, x, y): # initialze the properties of the object
+        super().__init__(string, x, y)
+        self.block_delta_x = 150
+
+class HideButton(Button):
+    def __init__(self, x, y):
+        super().__init__("Peida", x, y)
+        self.hidden = False
+        self.hide_text = "Peida"
+        self.show_text = "Näita"
+        self.backup_sprites=[]
+
+    def hide(self, block_group):
+        self.hidden = True
+        self.text = self.font.render(self.show_text, 1, self.color)
+        self.backup_sprites=block_group.sprites()
+        block_group.empty()
+
+    def show(self, block_group, connectToStart, triangle):
+        self.hidden = False
+        self.text = self.font.render(self.hide_text, 1, self.color)
+        for item in self.backup_sprites:
+            block_group.add(item)
+            item.connect(block_group)
+            connectToStart(item, triangle)
+
+class ExitButton(Button):
+    def __init__(self, string, x, y):
+        super().__init__(string, x, y)
+
+
+class UndoButton(Button):
+    def __init__(self, string, x, y):
+        super().__init__(string, x, y)
+        self.backup_sprite = []
+
+    def addBlock(self, block):
+        self.backup_sprite.append(block)
+
+    def undo(self,block_group):
+        if len(self.backup_sprite) > 0:
+            item = self.backup_sprite.pop()
+            block_group.add(item)
+            item.connect(block_group)
+            return item
+
+class SaveCodeButton(Button):
+    def __init__(self, string, x, y):
+        super().__init__(string, x, y)
+
 
 class AssignButton(BlockButton):
     def __init__(self, x, y):

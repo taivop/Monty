@@ -54,7 +54,8 @@ def setTargettext(targettext, item,  pos):
     if count != 0:
         result =  item.elements.getTextbox(pos//(int(item.width/count)))
         #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
-        result.borderColor = (255,255,255)
+        if result != None:
+            result.borderColor = (255,255,255)
     else:
         result = None
     return result
@@ -65,6 +66,7 @@ def newBlocks(targetbutton, block_group, targettext):
         block_group.add(item)
         item.connect(new_blocks)
     return new_blocks[0], None, setTargettext(targettext, new_blocks[0], 0)
+
 
 def main(): # Where we start
 
@@ -77,11 +79,13 @@ def main(): # Where we start
     Target=None # target of Drag/Drop
     last_target=None
     targettext=None
-    targetbutton=None
+    target_block_button=None
+    backup_sprites=[]
 
     block_group = pygame.sprite.LayeredUpdates()     # group for keeping Block objects (IN ORDER)
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
-    button_group = pygame.sprite.Group()
+    block_button_group = pygame.sprite.Group()
+    other_button_group = pygame.sprite.Group()
 
     triangle=StartTriangle((0,255,0),[10,0], 20,9) # create a new one
     other_group.add(triangle) # add to list of things to draw
@@ -97,9 +101,21 @@ def main(): # Where we start
     runbox.codebox = codebox
 
     # Create run button
-    runbutton = RunButton()
-
     button_x = 600
+
+    runbutton = RunButton()
+    hidebutton = HideButton(button_x, 390)
+    exitbutton = ExitButton("Välju", button_x, 450)
+    savecodebutton = SaveCodeButton("Salvesta", button_x, 360)
+    undobutton = UndoButton("Tagasi", button_x, 420)
+
+    other_button_group.add(hidebutton)
+    other_button_group.add(exitbutton)
+    other_button_group.add(runbutton)
+    other_button_group.add(savecodebutton)
+    other_button_group.add(undobutton)
+
+
     assignButton = AssignButton(button_x, 40)
     printButton = PrintButton(button_x, 70)
     ifButton = IfButton(button_x, 100)
@@ -110,14 +126,14 @@ def main(): # Where we start
     leftButton = LeftButton(button_x, 260)
     rightButton = RightButton(button_x, 290)
 
-    button_group.add(assignButton)
-    button_group.add(printButton)
-    button_group.add(forwardButton)
-    button_group.add(leftButton)
-    button_group.add(rightButton)
-    button_group.add(ifButton)
-    button_group.add(whileButton)
-    button_group.add(backButton)
+    block_button_group.add(assignButton)
+    block_button_group.add(printButton)
+    block_button_group.add(forwardButton)
+    block_button_group.add(leftButton)
+    block_button_group.add(rightButton)
+    block_button_group.add(ifButton)
+    block_button_group.add(whileButton)
+    block_button_group.add(backButton)
 
     while running:
         
@@ -150,18 +166,40 @@ def main(): # Where we start
             #    if mouseIsOn(item, pos):            # inside the bounding box
 
 
-            for item in button_group:
+            for item in block_button_group:
                 if mouseIsOn(item, pos):
-                    targetbutton = item
+                    target_block_button = item
                     break
 
+            if mouseIsOn(hidebutton, pos):
+                if not hidebutton.hidden:
+                    hidebutton.hide(block_group)
+                    disconnectChild(triangle)
+                else:
+                    hidebutton.show(block_group, connectToStart, triangle)
+                codebox.update(triangle)
+            elif mouseIsOn(exitbutton, pos):
+                pygame.quit()
+                break
+            elif mouseIsOn(savecodebutton, pos):
+                f=open("fail.py", 'w')
+                f.write(runbox.getProgramText())
+                f.close()
+            elif mouseIsOn(undobutton, pos):
+                item = undobutton.undo(block_group)
+                if item != None:
+                    connectToStart(item, triangle)
+                    if last_target == None:
+                        last_target = item
+                    codebox.update(triangle)
+
             # if run button was pressed:
-            if mouseIsOn(runbutton, pos):
+            elif mouseIsOn(runbutton, pos):
                 runbox.updateRunResult()
 
             
-            if Target is None and targetbutton != None:  # didn't click on a block or other object
-                Target, targetbutton, targettext = newBlocks(targetbutton, block_group, targettext)
+            if Target is None and target_block_button != None:  # didn't click on a block or other object
+                Target, target_block_button, targettext = newBlocks(target_block_button, block_group, targettext)
 
 
             if Target is not None:
@@ -173,14 +211,24 @@ def main(): # Where we start
                 if last_target != None:
                     disconnectParent(last_target)
                     disconnectChild(last_target)
-                    last_target.remove(block_group)
+                    last_target.kill()
+                    undobutton.addBlock(last_target)
+                    last_target = None
                     codebox.update(triangle)
             if event.key == K_RETURN:
                 runbox.updateRunResult()
-            for item in button_group:
+            if event.key == K_TAB:
+                if targettext != None and last_target != None:
+                    targettext.borderColor = (0,0,0)
+                    prev = targettext
+                    targettext, last_target = last_target.changeTextbox(targettext)
+                    if targettext == None:
+                        targettext = prev
+                    targettext.borderColor = (255,255,255)
+            for item in block_button_group:
                 if item.hotkey == event.key:
-                    targetbutton = item
-                    Target, targetbutton, targettext = newBlocks(targetbutton, block_group, targettext)
+                    target_block_button = item
+                    Target, target_block_button, targettext = newBlocks(target_block_button, block_group, targettext)
                     MouseReleased = True
                     break
 
@@ -216,10 +264,11 @@ def main(): # Where we start
         for item in other_group:
             item.Render(screen)
 
-        for item in button_group:
+        for item in block_button_group:
             item.Render(screen)
 
-        runbutton.Render(screen)
+        for item in other_button_group:
+            item.Render(screen)
             
         pygame.display.flip()
 

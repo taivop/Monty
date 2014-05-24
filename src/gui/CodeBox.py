@@ -110,15 +110,15 @@ class RunBox(pygame.sprite.Sprite):
         self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 26)
         self.coderunner = CodeRunner()
 
-    def updateRunResult(self):
-        # Get program text
+    def getProgramText(self):
+       # Get program text
         programText = ""
 
         # If we have any turtle statements, add turtle import
         addTurtle = False
         for block in self.codebox.blockList:
             name = block.__class__.__name__
-            if name == "ForwardBlock" or name == "RightBlock" or name == "LeftBlock":
+            if name == "ForwardBlock" or name == "RightBlock" or name == "LeftBlock" or name == "BackBlock":
                 addTurtle = True
 
         if addTurtle:
@@ -130,6 +130,12 @@ class RunBox(pygame.sprite.Sprite):
 
         if addTurtle:
             programText += "exitonclick()\n"
+
+        return programText
+
+    def updateRunResult(self):
+
+        programText = self.getProgramText()
 
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
