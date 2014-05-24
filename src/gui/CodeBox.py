@@ -122,11 +122,14 @@ class RunBox(pygame.sprite.Sprite):
                 addTurtle = True
 
         if addTurtle:
-            programText += "from turtle import *\nexitonclick()\n"
+            programText += "from turtle import *\n"
 
         # Add all program lines
         for line in self.codebox.lineList:
             programText += line + "\n"
+
+        if addTurtle:
+            programText += "exitonclick()\n"
 
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
