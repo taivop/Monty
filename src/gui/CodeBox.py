@@ -109,7 +109,18 @@ class RunBox(pygame.sprite.Sprite):
     def updateRunResult(self):
         # Get program text
         programText = ""
-        programText += "from turtle import *\nexitonclick()\n"
+
+        # If we have any turtle statements, add turtle import
+        addTurtle = False
+        for block in self.codebox.blockList:
+            name = block.__class__.__name__
+            if name == "ForwardBlock" or name == "RightBlock" or name == "LeftBlock":
+                addTurtle = True
+
+        if addTurtle:
+            programText += "from turtle import *\nexitonclick()\n"
+
+        # Add all program lines
         for line in self.codebox.lineList:
             programText += line + "\n"
 
