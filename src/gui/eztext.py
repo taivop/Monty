@@ -8,8 +8,10 @@ class Textbox():
         self.height = 20
         if varbox:
             self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', info='varbox')
-        else:
+        elif ifbox:
             self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>"\'', info='ifbox')
+        else:
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>"\'')
         self.borderColor = (0,0,0)
 
 
@@ -75,10 +77,11 @@ class Input:
         if event.type == KEYUP:
             if event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = False
         if event.type == KEYDOWN:
-            if event.key == K_BACKSPACE and len(self.value) > 0 and self.value[len(self.value)-1]=='=' and self.info == "ifbox": self.value = self.value[:-2]
+            if event.key == K_BACKSPACE and len(self.value) > 1 and self.value[len(self.value)-1]=='=' and \
+            self.value[len(self.value)-2] == '=' and self.info == "ifbox": self.value = self.value[:-2]
             elif event.key == K_BACKSPACE: self.value = self.value[:-1]
             elif event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = True
-            elif event.key == K_SPACE and not self.info == "varbox": self.value += ' '
+            #elif event.key == K_SPACE and not self.info == "varbox": self.value += ' '
             char = event.unicode
             if char == '+' and '+' in self.restricted: self.value += '+'
             elif char == '-' and '-' in self.restricted: self.value += '-'
@@ -87,6 +90,8 @@ class Input:
             elif char == '*' and '*' in self.restricted: self.value += '*'
             elif char == '/' and '/' in self.restricted: self.value += '/'
             elif char == '!' and '!' in self.restricted: self.value += '!'
+            elif char == '=' and '=' in self.restricted and self.info == "ifbox" and len(self.value) > 0 and \
+            (self.value[len(self.value)-1] == '<' or self.value[len(self.value)-1] == '>'): self.value += '='
             elif char == '=' and '=' in self.restricted and self.info == "ifbox": self.value += '=='
             elif char == '=' and '=' in self.restricted: self.value += '='
             elif char == '<' and '<' in self.restricted: self.value += '<'

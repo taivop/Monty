@@ -9,11 +9,17 @@ from gui.CodeBox import *
 from gui.buttons import *
 
 
-def disconnectBlocks(block):
+def disconnectParent(block):
     if block.hasParent():
         block.parent.child = None
         block.parent = None
-        print("disconnected blocks")
+    print("disconnected blocks")
+
+def disconnectChild(block):
+    if block.hasChild():
+        block.child.parent = None
+        block.child = None
+    print("disconnected blocks")
 
 def mouseIsOn(item, mouse_pos):
     """ Check if mouse (at mouse_pos) is on the item.
@@ -52,6 +58,13 @@ def setTargettext(targettext, item,  pos):
     else:
         result = None
     return result
+
+def newBlocks(targetbutton, block_group, targettext):
+    new_blocks=targetbutton.newBlocks()
+    for item in new_blocks:
+        block_group.add(item)
+        item.connect(new_blocks)
+    return new_blocks[0], None, setTargettext(targettext, new_blocks[0], 0)
 
 def main(): # Where we start
 
@@ -130,8 +143,6 @@ def main(): # Where we start
             for item in block_group:
                 if mouseIsOn(item, pos):            # inside the bounding box
                     Target=item                     # "pick up" item
-                    if targettext != None:
-                        targettext.borderColor = (0,0,0)
                     targettext = setTargettext(targettext, item, (pos[0]-item.pos[0]))
 
 
@@ -150,21 +161,29 @@ def main(): # Where we start
 
             
             if Target is None and targetbutton != None:  # didn't click on a block or other object
-                new_blocks=targetbutton.newBlocks()
-                for item in new_blocks:
-                    block_group.add(item)
-                    item.connect(new_blocks)
-                Target = new_blocks[0]
-                targetbutton = None
-                targettext = setTargettext(targettext, Target, 0)
-
+                Target, targetbutton, targettext = newBlocks(targetbutton, block_group, targettext)
 
 
             if Target is not None:
                 Target.deltax=pos[0]-Target.pos[0]
                 Target.deltay=pos[1]-Target.pos[1]
 
-                
+        if event.type == KEYDOWN:
+            if event.key == K_DELETE:
+                if last_target != None:
+                    disconnectParent(last_target)
+                    disconnectChild(last_target)
+                    last_target.remove(block_group)
+                    codebox.update(triangle)
+            if event.key == K_RETURN:
+                runbox.updateRunResult()
+            for item in button_group:
+                if item.hotkey == event.key:
+                    targetbutton = item
+                    Target, targetbutton, targettext = newBlocks(targetbutton, block_group, targettext)
+                    MouseReleased = True
+                    break
+
         if MouseDown and Target is not None: # if we are dragging something
 
 
@@ -175,22 +194,12 @@ def main(): # Where we start
 
 
         if MouseReleased and Target is not None:
-            disconnectBlocks(Target)
+            disconnectParent(Target)
             Target.connect(block_group)
             connectToStart(Target, triangle)
             codebox.update(triangle)
             last_target = Target
             Target=None # Drop item, if we have any
-
-
-        if event.type == KEYDOWN:
-            if event.key == K_DELETE:
-                if last_target != None:
-                    disconnectBlocks(last_target)
-                    last_target.remove(block_group)
-                    codebox.update(triangle)
-            if event.key == K_RETURN:
-                runbox.updateRunResult()
 
 
         # RENDERING
