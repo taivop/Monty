@@ -1,6 +1,7 @@
 import pygame
 from gui.DebugHelper import DebugHelper
 from gui.blocks import *
+from language.coderunner import CodeRunner
 
 
 class CodeBox(pygame.sprite.Sprite):
@@ -95,10 +96,27 @@ class RunBox(pygame.sprite.Sprite):
     font = None
     title_font = None
 
+    coderunner = None
+    run_output = None
+    run_errors = None
+
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.SysFont("Courier New", 18)
         self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 26)
+        self.coderunner = CodeRunner()
+
+    def updateRunResult(self):
+        # Get program text
+        programText = ""
+        for line in self.codebox.lineList:
+            programText.append(line + "\n")
+
+        result = self.coderunner.execute(programText)
+        self.run_output = result[0]
+        self.run_errors = result[1]
+
+
 
     def Render(self,screen):
 
@@ -110,9 +128,3 @@ class RunBox(pygame.sprite.Sprite):
         label_obj = self.title_font.render("Väljund:", 1, (0, 0, 0))
         blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+5))
         DebugHelper.drawDebugRect(blit, screen)
-
-
-        if self.codebox.start_triangle_child_count != -1:
-            foo = 0
-
-
