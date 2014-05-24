@@ -101,9 +101,9 @@ class BlockElementList():
         self.texts = []
         for item in list:
             if isinstance(item[0], int):
-                self.textboxes.append(TextboxElement(item[0],item[1],item[2]))
+                self.textboxes.append(TextboxElement(item))
             else:
-                self.texts.append(TextElement(item[0],item[1],item[2]))
+                self.texts.append(TextElement(item))
 
     def getTextboxValues(self):
         result = []
@@ -115,19 +115,25 @@ class BlockElementList():
         return self.textboxes[i]
 
 class BlockElement():
-    def __init__(self, value, x, y):
-        self.value = value
-        self.x = x
-        self.y = y
+    def __init__(self, item):
+        self.value = item[0]
+        self.x = item[1]
+        self.y = item[2]
+        self.info = ""
+        if len(item) > 3:
+            self.info = item[3]
 
     def getElement(self):
         return self.pointer
 
 
 class TextboxElement(BlockElement):
-    def __init__(self, value, x, y):
-        super().__init__(value, x, y)
-        self.pointer = Textbox(self.value)
+    def __init__(self, item):
+        super().__init__(item)
+        if self.info == "ifbox":
+            self.pointer = Textbox(self.value, ifbox=True)
+        else:
+            self.pointer = Textbox(self.value)
 
     def Render(self, screen, x, y):
         self.pointer.Render(screen, x+self.x, y+self.y)
@@ -136,8 +142,8 @@ class TextboxElement(BlockElement):
         return self.pointer.getValue()
 
 class TextElement(BlockElement):
-    def __init__(self, value, x, y):
-        super().__init__(value, x, y)
+    def __init__(self, item):
+        super().__init__(item)
         title_font = pygame.font.Font("OpenSans-Regular.ttf", 18, bold=True)
         self.pointer = title_font.render(self.value, 1, (0,0,0))
 
@@ -206,7 +212,7 @@ class RightBlock(Block):
 
 class IfBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Kas",2,7),(12,40,10),("?",185,7)))
+        list = BlockElementList((("Kas",2,7),(12,40,10,"ifbox"),("?",185,7)))
         super().__init__(pos, "block4.png", "if {0}:", list, move_right=18)
 
     def getAstNode(self):

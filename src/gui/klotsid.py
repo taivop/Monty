@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 import os, sys
 sys.path.append(os.path.abspath(".."))
 
@@ -113,8 +114,9 @@ def main(): # Where we start
                     if count != 0:
                         targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))].getElement()
                         #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
-
                         targettext.borderColor = (255,255,255)
+                    else:
+                        targettext = None
 
 
             #for item in other_group:
@@ -157,6 +159,10 @@ def main(): # Where we start
             codebox.update(triangle)
 
             Target=None # Drop item, if we have any
+
+        if event.type == KEYUP:
+            if event.key == K_DELETE:
+                targettext
 
         # RENDERING
 

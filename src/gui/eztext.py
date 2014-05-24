@@ -3,16 +3,14 @@ from pygame.locals import *
 import pygame, string
 
 class Textbox():
-    def __init__(self, length, integerBox=False):
-        #self.color = (255,255,255)
+    def __init__(self, length, integerBox=False, ifbox=False):
         self.length = length
         self.height = 20
         if integerBox:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!<>')
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!<>', ifbox=ifbox)
         else:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>')
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>', ifbox=ifbox)
         self.borderColor = (0,0,0)
-        #self.rectColor = (100,100,100)
 
 
     def Render(self, screen, x, y):
@@ -20,7 +18,6 @@ class Textbox():
         self.txtbx.draw(screen)
         self.ristkylik1 = pygame.Rect(x, y, int(self.length*11.5), self.height)
         pygame.draw.rect(screen, self.borderColor, self.ristkylik1, 2)
-        #pygame.draw.rect(screen, self.rectColor, self.ristkylik1)
 
     def Update(self, event):
         self.txtbx.update(event)
@@ -48,7 +45,7 @@ class Input:
         """ Options: x, y, font, color, restricted, maxlength, prompt """
         self.options = Config(options, ['x', '0'], ['y', '0'], ['font', 'pygame.font.SysFont("Courier", 18,bold=True)'],
                               ['color', '(0,0,0)'], ['restricted', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'],
-                              ['maxlength', '-1'], ['prompt', '\'\''])
+                              ['maxlength', '-1'], ['prompt', '\'\''], ['ifbox', False])
         self.x = self.options.x; self.y = self.options.y
         self.font = self.options.font
         self.color = self.options.color
@@ -56,6 +53,7 @@ class Input:
         self.maxlength = self.options.maxlength
         self.prompt = self.options.prompt; self.value = ''
         self.shifted = False
+        self.ifbox = self.options.ifbox
 
     def set_pos(self, x, y):
         """ Set the position to x, y """
@@ -77,7 +75,8 @@ class Input:
         if event.type == KEYUP:
             if event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = False
         if event.type == KEYDOWN:
-            if event.key == K_BACKSPACE: self.value = self.value[:-1]
+            if event.key == K_BACKSPACE and len(self.value) > 0 and self.value[len(self.value)-1]=='=' and self.ifbox: self.value = self.value[:-2]
+            elif event.key == K_BACKSPACE: self.value = self.value[:-1]
             elif event.key == K_LSHIFT or event.key == K_RSHIFT: self.shifted = True
             elif event.key == K_SPACE: self.value += ' '
             char = event.unicode
@@ -88,6 +87,7 @@ class Input:
             elif char == '*' and '*' in self.restricted: self.value += '*'
             elif char == '/' and '/' in self.restricted: self.value += '/'
             elif char == '!' and '!' in self.restricted: self.value += '!'
+            elif char == '=' and '=' in self.restricted and self.ifbox: self.value += '=='
             elif char == '=' and '=' in self.restricted: self.value += '='
             elif char == '<' and '<' in self.restricted: self.value += '<'
             elif char == '>' and '>' in self.restricted: self.value += '>'
