@@ -8,9 +8,9 @@ class Textbox():
         self.length = length
         self.height = 20
         if integerBox:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!')
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='0123456789()/*-+=!<>')
         else:
-            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!')
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>')
         self.borderColor = (0,0,0)
         #self.rectColor = (100,100,100)
 
@@ -89,6 +89,8 @@ class Input:
             elif char == '/' and '/' in self.restricted: self.value += '/'
             elif char == '!' and '!' in self.restricted: self.value += '!'
             elif char == '=' and '=' in self.restricted: self.value += '='
+            elif char == '<' and '<' in self.restricted: self.value += '<'
+            elif char == '>' and '>' in self.restricted: self.value += '>'
             if not self.shifted:
                 if event.key == K_a and 'a' in self.restricted: self.value += 'a'
                 elif event.key == K_b and 'b' in self.restricted: self.value += 'b'

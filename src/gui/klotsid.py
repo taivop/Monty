@@ -103,10 +103,10 @@ def main(): # Where we start
                     Target=item                     # "pick up" item
                     if targettext != None:
                         targettext.borderColor = (0,0,0)
-                    textboxes = item.getTextboxes()
+                    textboxes = item.elements.textboxes
                     count = len(textboxes)
                     if count != 0:
-                        targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))]
+                        targettext = textboxes[(pos[0]-item.pos[0])//(int(item.width/count))].getElement()
                         #eeldame, et textboxid on võrdse pikkusega, võrdsetel kaugustel
 
                         targettext.borderColor = (255,255,255)
@@ -157,10 +157,10 @@ def main(): # Where we start
 
         for item in block_group:
             item.Render(screen) # Draw all items
-            textboxes = item.getTextboxes()
+            textboxes = item.elements.textboxes
             for box in textboxes:
-                if targettext == box:
-                    box.Update(event)
+                if targettext == box.getElement():
+                    box.getElement().Update(event)
                     break
 
 
