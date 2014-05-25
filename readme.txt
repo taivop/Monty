@@ -13,7 +13,7 @@ Eeldused:
 
 Kasutamine:
 
-1. Monty käivitamiseks tuleb Pythoni 3.1 versioonis jooksutada faili main.py.
+1. Monty käivitamiseks tuleb Pythoni 3.1 versioonis jooksutada faili gui/monty.py.
 2. Programmi kasutamine:
 	* vasakul servas on erinevad nupud, mis on jaotatud gruppidesse
 	* esimese grupi klotsidele vajutades või nendelt vedades ilmub alale vastava funktsiooniga klots
@@ -37,4 +37,11 @@ Koodist:
 * programmi kood on kättesaadav GitHubi repositooriumist aadressil https://github.com/taivop/Monty
 * kood ja erinevad lisafailid on jaotatud erinevatesse kaustadesse vastavalt faili tüüpidele ja sisule
 
-kirjutage siia midagi, ma AST-ist väga ei saa aru seal
+
+Tehniline pool:
+Pärast sisendikontrolli genereerib Monty igale klotsile vastava koodirea. Neid ridu näidatakse kasutajale ekraanil ja nupu "Käivita!" vajutamisel proovib Monty programmi käivitama hakata.
+Käivitamise protsess näeb välja selline:
+	1. Pythoni AST teegi abil teeb Monty programmikoodist abstraktse süntaksipuu.
+	2. Abstraktne süntaksipuu kompileeritakse...
+	3. ...ja seejärel käivitatakse.
+Kui ükskõik millises neist sammudest tekib erind, püüab Monty selle kinni ja annab kasutajale erindist teada programmi väljundikastis.väljundi kastis punase tekstiga.
