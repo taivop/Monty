@@ -187,7 +187,7 @@ class AssignBlock(Block):
     """
     def __init__(self, pos):
         list = BlockElementList(((7,2,12, "varbox"),(7,104,12), ("=",89,8)))
-        super().__init__(pos, "block1.png", "{0} = {1}", list)
+        super().__init__(pos, "assignblock.png", "{0} = {1}", list)
 
 
     def getAstNode(self):
@@ -203,7 +203,7 @@ class PrintBlock(Block):
     """
     def __init__(self, pos):
         list = BlockElementList(((12,60,10),("Trüki",2,7)))
-        super().__init__(pos, "block2.png", "print({0})", list)
+        super().__init__(pos, "printblock.png", "print({0})", list)
 
     def getAstNode(self):
         # TODO: handle error if not a legal print
@@ -215,7 +215,7 @@ class PrintBlock(Block):
 class ForwardBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((12,60,10),("Edasi",2,7)))
-        super().__init__(pos, "block3.png", "fd({0})", list)
+        super().__init__(pos, "turtleblock.png", "fd({0})", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -225,7 +225,7 @@ class ForwardBlock(Block):
 class BackBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((12,60,10),("Tagasi",2,7)))
-        super().__init__(pos, "block3.png", "bk({0})", list)
+        super().__init__(pos, "turtleblock.png", "bk({0})", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -235,7 +235,7 @@ class BackBlock(Block):
 class LeftBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((12,60,10),("Vasak",2,7)))
-        super().__init__(pos, "block3.png", "lt({0})", list)
+        super().__init__(pos, "turtleblock.png", "lt({0})", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -245,7 +245,7 @@ class LeftBlock(Block):
 class RightBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((12,60,10),("Parem",2,7)))
-        super().__init__(pos, "block3.png", "rt({0})", list)
+        super().__init__(pos, "turtleblock.png", "rt({0})", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -255,7 +255,7 @@ class RightBlock(Block):
 class IfBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Kas",2,7),(12,40,10,"ifbox"),("?",185,7)))
-        super().__init__(pos, "block4.png", "if {0}:", list, move_right=18)
+        super().__init__(pos, "ifblock.png", "if {0}:", list, move_right=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -265,7 +265,7 @@ class IfBlock(Block):
 class EndIfBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Kui ei, jätkame siit",2,7),))
-        super().__init__(pos, "block5.png", "", list, move_left=18)
+        super().__init__(pos, "endifblock.png", "", list, move_left=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -274,8 +274,8 @@ class EndIfBlock(Block):
 
 class WhileBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Kas",2,7),(12,40,10,"ifbox"),("?",185,7)))
-        super().__init__(pos, "block4.png", "while {0}:", list, move_right=18)
+        list = BlockElementList((("Kuni",2,7),(12,40,10,"ifbox"),(", tee:",185,7)))
+        super().__init__(pos, "whileblock.png", "while {0}:", list, move_right=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -284,8 +284,8 @@ class WhileBlock(Block):
 
 class EndWhileBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Kui jah, kordame",2,7),))
-        super().__init__(pos, "block5.png", "", list, move_left=18)
+        list = BlockElementList((("Jätka siit:",2,7),))
+        super().__init__(pos, "endwhileblock.png", "", list, move_left=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -296,7 +296,7 @@ class EndWhileBlock(Block):
 class FunctionBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((7,2,10,"varbox"),("(",90,7),(7,100,10,"argbox"),(")",185,7)))
-        super().__init__(pos, "block4.png", "def {0} ({1}):", list, move_right=18)
+        super().__init__(pos, "functionblock.png", "def {0} ({1}):", list, move_right=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -306,7 +306,7 @@ class FunctionBlock(Block):
 class EndFunctionBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Funktsiooni lõpp",2,7),))
-        super().__init__(pos, "block5.png", "", list, move_left=18)
+        super().__init__(pos, "endfunctionblock.png", "", list, move_left=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -316,7 +316,7 @@ class EndFunctionBlock(Block):
 class EmptyBlock(Block):
     def __init__(self, pos):
         list = BlockElementList(((17,2,10,"argbox"),))
-        super().__init__(pos, "block1.png", "{0}", list)
+        super().__init__(pos, "emptyblock.png", "{0}", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -325,8 +325,8 @@ class EmptyBlock(Block):
 
 class ForBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList(((9,40,10),("Tee",2,7),("korda",146,7)))
-        super().__init__(pos, "block4.png", "for _ in range({0}):", list, move_right=18)
+        list = BlockElementList(((9,40,10),("Tee",2,7),("korda:",146,7)))
+        super().__init__(pos, "forblock.png", "for _ in range({0}):", list, move_right=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -336,7 +336,7 @@ class ForBlock(Block):
 class EndForBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Jätka siit",2,7),))
-        super().__init__(pos, "block5.png", "", list, move_left=18)
+        super().__init__(pos, "endforblock.png", "", list, move_left=18)
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
         (tree, error) = AstHandler.codeToAst(self.getText())

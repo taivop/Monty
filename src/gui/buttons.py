@@ -6,7 +6,7 @@ __author__ = 'Anti'
 class Button(pygame.sprite.Sprite):
     def __init__(self, string, x, y, width= 105, height=25): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
-        self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
+        self.font = pygame.font.Font("OpenSans-Regular.ttf", 14)
         self.color = (0,0,0)
         self.borderColor = (0,0,0)
         self.text = self.font.render(string, 1, self.color)
@@ -110,15 +110,16 @@ class IfButton(BlockButton):
 
 class WhileButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Kordus", x, y)
+        super().__init__("Kuni-tsükkel", x, y)
         self.hotkey = K_F4
 
     def newBlocks(self):
         return [WhileBlock((self.pos[0]-self.block_delta_x, self.pos[1])),
                 EndWhileBlock((self.pos[0]-self.block_delta_x, self.pos[1]+30))]
+
 class ForButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Kordus", x, y)
+        super().__init__("Kordustsükkel", x, y)
         self.hotkey = K_F5
 
     def newBlocks(self):
