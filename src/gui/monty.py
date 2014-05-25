@@ -233,8 +233,8 @@ def main(): # Where we start
                 if item != None:
                     for triangle in triangle_group:
                         triangle.connect(item)
-                        if last_target == None:
-                            last_target = item
+                        #if last_target == None:
+                        last_target = item
                     codebox.update(triangle_group)
             elif mouseIsOn(runbutton, pos):
                 runbox.updateRunResult()
