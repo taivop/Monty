@@ -4,12 +4,13 @@ from gui.blocks import *
 __author__ = 'Anti'
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, string, x, y, width= 105, height=25,border=(255,55,25)): # initialze the properties of the object
+    def __init__(self, string, x, y, width= 105, height=25, border=(255,55,25)): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.Font("OpenSans-Regular.ttf", 14)
-        self.color = (10,10,10)
-        self.borderColor = border
-        self.text = self.font.render(string, 1, self.color)
+        self.text_color = (10,10,10)
+        self.fill_color = (255,255,255)
+        self.border_color = border
+        self.text = self.font.render(string, 1, self.text_color)
         self.rect = self.text.get_rect()
         self.rect.width = width
         self.rect.height = height
@@ -21,12 +22,13 @@ class Button(pygame.sprite.Sprite):
         self.block_delta_x = 150
 
     def Render(self, screen):
-        pygame.draw.rect(screen, self.borderColor, self.rect, 2)
-        screen.blit(self.text, (self.pos[0]+((self.width-self.text.get_width())/2), self.pos[1]))
+        pygame.draw.rect(screen, self.fill_color, self.rect, 0) #border
+        pygame.draw.rect(screen, self.border_color, self.rect, 2) #fill
+        screen.blit(self.text, (self.pos[0]+((self.width-self.text.get_width())/2), self.pos[1]+3)) #text
 
 class BlockButton(Button):
-    def __init__(self, string, x, y): # initialze the properties of the object
-        super().__init__(string, x, y)
+    def __init__(self, string, x, y, border_color=(255,55,25)): # initialze the properties of the object
+        super().__init__(string, x, y, border=border_color)
         self.block_delta_x = -120
 
 class SceneButtons(Button):
@@ -46,7 +48,7 @@ class SceneButtons(Button):
             self.current_scene = 1
         else:
             self.current_scene += 1
-        self.text = self.font.render("Stseen "+str(self.current_scene), 1, self.color)
+        self.text = self.font.render("Stseen "+str(self.current_scene), 1, self.text_color)
         for item in self.backup_sprites[self.current_scene-1]:
             block_group.add(item)
             item.connect(block_group)
@@ -85,7 +87,7 @@ class SaveCodeButton(Button):
 
 class AssignButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Omista",x ,y)
+        super().__init__("Omista",x ,y,(21,155,205))
         self.hotkey = K_F1
 
     def newBlocks(self):
@@ -93,7 +95,7 @@ class AssignButton(BlockButton):
 
 class PrintButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Trüki",x ,y)
+        super().__init__("Trüki",x ,y, (255,41,80))
         self.hotkey = K_F2
 
     def newBlocks(self):
@@ -101,7 +103,7 @@ class PrintButton(BlockButton):
 
 class IfButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Tingimus", x, y)
+        super().__init__("Tingimus", x, y, (255,252,0))
         self.hotkey = K_F3
 
     def newBlocks(self):
@@ -119,7 +121,7 @@ class WhileButton(BlockButton):
 
 class ForButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Kordustsükkel", x, y)
+        super().__init__("Kordustsükkel", x, y, (255,70,170))
         self.hotkey = K_F5
 
     def newBlocks(self):
@@ -128,7 +130,7 @@ class ForButton(BlockButton):
 
 class FunctionButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Funktsioon", x, y)
+        super().__init__("Funktsioon", x, y, (154,18,179))
         self.hotkey = K_F6
 
     def newBlocks(self):
@@ -137,7 +139,7 @@ class FunctionButton(BlockButton):
 
 class EmptyButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Tühi", x, y)
+        super().__init__("Tühi", x, y, (40,40,40))
         self.hotkey = K_F7
 
     def newBlocks(self):
@@ -145,7 +147,7 @@ class EmptyButton(BlockButton):
 
 class ForwardButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Edasi", x, y)
+        super().__init__("Edasi", x, y, (27,171,43))
         self.hotkey = K_F8
 
     def newBlocks(self):
@@ -153,7 +155,7 @@ class ForwardButton(BlockButton):
 
 class BackButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Tagasi", x, y)
+        super().__init__("Tagasi", x, y, (27,171,43))
         self.hotkey = K_F9
 
     def newBlocks(self):
@@ -161,7 +163,7 @@ class BackButton(BlockButton):
 
 class LeftButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Vasakule", x, y)
+        super().__init__("Vasakule", x, y, (27,171,43))
         self.hotkey = K_F10
 
     def newBlocks(self):
@@ -169,7 +171,7 @@ class LeftButton(BlockButton):
 
 class RightButton(BlockButton):
     def __init__(self, x, y):
-        super().__init__("Paremale", x, y)
+        super().__init__("Paremale", x, y, (27,171,43))
         self.hotkey = K_F11
 
     def newBlocks(self):
