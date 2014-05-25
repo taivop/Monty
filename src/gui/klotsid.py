@@ -104,11 +104,11 @@ def main(): # Where we start
     between_group = 30
 
     runbutton = RunButton()
-    clearbutton = ClearButton       ("Puhasta", button_x, first_y+13*delta_y+2*between_group)
-    exitbutton = ExitButton         ("Välju",   button_x, first_y+14*delta_y+2*between_group)
-    savecodebutton = SaveCodeButton ("Salvesta",button_x, first_y+10*delta_y+2*between_group)
-    undobutton = UndoButton         ("Tagasi",  button_x, first_y+12*delta_y+2*between_group)
-    scenebutton = SceneButtons      (           button_x, first_y+11*delta_y+2*between_group)
+    clearbutton = ClearButton       ("Puhasta", button_x, first_y+14*delta_y+2*between_group)
+    exitbutton = ExitButton         ("Välju",   button_x, first_y+15*delta_y+2*between_group)
+    savecodebutton = SaveCodeButton ("Salvesta",button_x, first_y+11*delta_y+2*between_group)
+    undobutton = UndoButton         ("Tagasi",  button_x, first_y+13*delta_y+2*between_group)
+    scenebutton = SceneButtons      (           button_x, first_y+12*delta_y+2*between_group)
 
     other_button_group.add(clearbutton)
     other_button_group.add(exitbutton)
@@ -122,13 +122,14 @@ def main(): # Where we start
     printButton = PrintButton(button_x, first_y+1*delta_y)
     ifButton = IfButton(button_x, first_y+2*delta_y)
     whileButton = WhileButton(button_x, first_y+3*delta_y)
-    functionbutton = FunctionButton(button_x, first_y+4*delta_y)
-    emptybutton = EmptyButton(button_x, first_y+5*delta_y)
+    functionbutton = FunctionButton(button_x, first_y+5*delta_y)
+    emptybutton = EmptyButton(button_x, first_y+6*delta_y)
+    forbutton = ForButton(button_x, first_y+4*delta_y)
 
-    forwardButton = ForwardButton(button_x, first_y+7*delta_y+1*between_group)
-    backButton = BackButton(button_x, first_y+6*delta_y+1*between_group)
-    leftButton = LeftButton(button_x, first_y+8*delta_y+1*between_group)
-    rightButton = RightButton(button_x, first_y+9*delta_y+1*between_group)
+    forwardButton = ForwardButton(button_x, first_y+8*delta_y+1*between_group)
+    backButton = BackButton(button_x, first_y+7*delta_y+1*between_group)
+    leftButton = LeftButton(button_x, first_y+9*delta_y+1*between_group)
+    rightButton = RightButton(button_x, first_y+10*delta_y+1*between_group)
 
     block_button_group.add(assignButton)
     block_button_group.add(printButton)
@@ -140,6 +141,7 @@ def main(): # Where we start
     block_button_group.add(backButton)
     block_button_group.add(functionbutton)
     block_button_group.add(emptybutton)
+    block_button_group.add(forbutton)
 
     while running:
         
