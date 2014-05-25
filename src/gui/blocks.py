@@ -273,7 +273,7 @@ class EndIfBlock(Block):
 
 class WhileBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Kuni",2,7),(12,40,10,"ifbox"),(", tee:",185,7)))
+        list = BlockElementList((("Kuni",2,7),(10,43,10,"ifbox"),(", tee",160,7)))
         super().__init__(pos, "whileblock.png", "while {0}:", list, move_right=18)
 
     def getAstNode(self):
@@ -283,7 +283,7 @@ class WhileBlock(Block):
 
 class EndWhileBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Jätka siit:",2,7),))
+        list = BlockElementList((("Kui tehtud jätkame siit",2,7),))
         super().__init__(pos, "endwhileblock.png", "", list, move_left=18)
 
     def getAstNode(self):
@@ -324,7 +324,7 @@ class EmptyBlock(Block):
 
 class ForBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList(((9,40,10),("Tee",2,7),("korda:",146,7)))
+        list = BlockElementList(((9,40,10),("Tee",2,7),("korda",146,7)))
         super().__init__(pos, "forblock.png", "for _ in range({0}):", list, move_right=18)
 
     def getAstNode(self):
@@ -334,7 +334,7 @@ class ForBlock(Block):
 
 class EndForBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Jätka siit",2,7),))
+        list = BlockElementList((("Kui tehtud jätkame siit",2,7),))
         super().__init__(pos, "endforblock.png", "", list, move_left=18)
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
