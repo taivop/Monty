@@ -82,8 +82,8 @@ def main(): # Where we start
     other_button_group = pygame.sprite.Group()
     triangle_group = pygame.sprite.Group()
 
-    triangle=StartTriangle((0,255,0),[10,0], 20,9) # create a new one
-    triangle2 = StartTriangle((255,0,0),[300,0], 20,9)
+    triangle=StartTriangle((0,255,0),[150,0], 20,9) # create a new one
+    triangle2 = StartTriangle((255,0,0),[450,0], 20,9)
     triangle_group.add(triangle) # add to list of things to draw
     triangle_group.add(triangle2)
 
@@ -98,7 +98,7 @@ def main(): # Where we start
     runbox.codebox = codebox
 
     # Create run button
-    button_x = 595
+    button_x = 10
     first_y = 10
     delta_y = 30
     between_group = 30

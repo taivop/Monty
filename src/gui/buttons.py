@@ -27,7 +27,7 @@ class Button(pygame.sprite.Sprite):
 class BlockButton(Button):
     def __init__(self, string, x, y): # initialze the properties of the object
         super().__init__(string, x, y)
-        self.block_delta_x = 150
+        self.block_delta_x = -120
 
 class SceneButtons(Button):
     def __init__(self, x, y):

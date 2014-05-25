@@ -102,7 +102,9 @@ class RunBox(pygame.sprite.Sprite):
     run_error = ""
 
     errorExplanations = {
-        "SyntaxError":  "Süntaksi viga"
+        "SyntaxError":  "Süntaksi viga\n* kontrolli programm üle!",
+        "NameError": "Nimeerind\n*kas kasutatavad muutujad\non ikka väärtustatud?",
+        "IndentationError" : "Taandeerind\n* kas kastid on ikka\ntäidetud?"
     }
 
     def __init__(self):
@@ -173,8 +175,10 @@ class RunBox(pygame.sprite.Sprite):
             if rawErrorText in self.errorExplanations:
                 displayedErrorText = self.errorExplanations[rawErrorText]
 
-            label_obj = self.font.render(displayedErrorText, 1, (255, 0, 0))
-            blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding))
+            displayedErrorTextLines = displayedErrorText.split("\n")
+            for i in range(len(displayedErrorTextLines)):
+                label_obj = self.font.render(displayedErrorTextLines[i], 1, (255, 0, 0))
+                blit = screen.blit(label_obj, (self.x+self.left_padding, self.y+self.top_padding+self.line_height*i))
             DebugHelper.drawDebugRect(blit, screen)
 
 
