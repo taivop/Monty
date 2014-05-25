@@ -31,7 +31,7 @@ class CodeBox(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.SysFont("Courier New", 18)
-        self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 26)
+        self.title_font = pygame.font.Font("resources/OpenSans-Regular.ttf", 26)
 
 
     def Render(self,screen):
@@ -112,7 +112,7 @@ class RunBox(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.SysFont("Courier New", 18)
-        self.title_font = pygame.font.Font("OpenSans-Regular.ttf", 26)
+        self.title_font = pygame.font.Font("resources/OpenSans-Regular.ttf", 26)
         self.coderunner = CodeRunner()
 
     def getProgramText(self):
@@ -221,7 +221,7 @@ class RunButton(pygame.sprite.Sprite):
 
     def __init__(self): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
-        self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
+        self.font = pygame.font.Font("resources/OpenSans-Regular.ttf", 18)
         self.color = (255,255,255)
         self.borderColor = (0,0,0)
         self.text = self.font.render("Käivita!", 1, self.color)

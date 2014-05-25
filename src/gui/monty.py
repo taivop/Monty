@@ -96,11 +96,11 @@ def main(): # Where we start
     triangle_group.add(triangle2)
 
     # Create a helper block
-    helperblock = HelperBlock((triangle.pos[0]-triangle.width/2,triangle.pos[1]),"dragblockshere.png")
-    helperblock2 = HelperBlock((triangle2.pos[0]-triangle2.width/2,triangle2.pos[1]),"andhere.png")
+    helperblock = HelperBlock((triangle.pos[0]-triangle.width/2,triangle.pos[1]),"resources/dragblockshere.png")
+    helperblock2 = HelperBlock((triangle2.pos[0]-triangle2.width/2,triangle2.pos[1]),"resources/andhere.png")
 
     # Create a trashbin
-    trashbin = DeleteBin((640,540),"trash.png")
+    trashbin = DeleteBin((640,540),"resources/trash.png")
 
     # Create run box and code box
     runbox = RunBox()
