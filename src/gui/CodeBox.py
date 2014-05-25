@@ -59,9 +59,11 @@ class CodeBox(pygame.sprite.Sprite):
         indent = 0
         for block in self.blockList:
             self.lineList.append(indent * "  " + block.getText())
-            if block.__class__.__name__ == "IfBlock" or block.__class__.__name__ == "WhileBlock" or block.__class__.__name__ == "FunctionBlock":
+            if block.__class__.__name__ == "IfBlock" or block.__class__.__name__ == "WhileBlock" or block.__class__.__name__ == "FunctionBlock"\
+                    or block.__class__.__name__ == "ForBlock":
                 indent += 1
-            elif block.__class__.__name__ == "EndIfBlock" or block.__class__.__name__ == "EndWhileBlock" or block.__class__.__name__== "EndFunctionBlock":
+            elif block.__class__.__name__ == "EndIfBlock" or block.__class__.__name__ == "EndWhileBlock" or block.__class__.__name__== "EndFunctionBlock"\
+                    or block.__class__.__name__ == "EndForBlock":
                 indent -= 1
 
     def update(self, triangle_group):
@@ -140,6 +142,7 @@ class RunBox(pygame.sprite.Sprite):
        # Get program text
         programText = ""
         function_names = []
+        arguments = []
 
         # If we have any turtle statements, add turtle import
         addTurtle = False
@@ -153,19 +156,21 @@ class RunBox(pygame.sprite.Sprite):
 
         if addTurtle:
             programText += "from turtle import *\n"
-            #function_names.extend(["fd","bk","lt","rt","exitonclick"])
+            arguments.extend(["fd","bk","lt","rt","exitonclick"])
         if len(function_names) != 0:
             programText += "global " + ",".join(function_names)+"\n"
 
+        programText += "def main(" + ",".join(arguments) + "):\n"
 
         # Add all program lines
         for line in self.codebox.lineList:
-            programText += line + "\n"
+            programText += "  "+ line + "\n"
 
         if addTurtle:
-            programText += "exitonclick()\n"
+            programText += "  exitonclick()\n"
 
-        print(programText)
+        programText += "main(" + ",".join(arguments) + ")\n"
+
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
         self.run_error = result[1]
