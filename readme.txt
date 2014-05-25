@@ -48,3 +48,5 @@ Käivitamise protsess näeb välja selline:
 Kui ükskõik millises neist sammudest tekib erind, püüab Monty selle kinni ja annab kasutajale erindist teada programmi väljundikastis.väljundi kastis punase tekstiga.
 
 Monty lähtekood on jaotatud kahte moodulisse. Moodul gui tegeleb kogu graafilise liidese joonistamise ja haldamisega - see moodustab suurema osa programmi koodist. Moodulist language olevad klassid, peamiselt CodeRunner, tegelevad koodi jooksutamisega.
+
+Koodi lugemist võib alustada klassist gui/blocks.py - seal on defineeritud kõik kasutatavad klotsid ning nende väljastatav kood. Graafilist liidest haldav kood on gui/monty.py-s, erinevad graafilised objektid ja nendega seotud meetodid on vastava nimega kastides. Failis CodeBox.py on kood, mille abil genereeritakse ja joonistatakse rakenduse parempoolses ribas olev programmi kood ja programmi väljund.
