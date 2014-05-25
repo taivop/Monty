@@ -316,8 +316,8 @@ class FunctionBlock(Block):
 
 class EndFunctionBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Funktsiooni lõpp",2,7),))
-        super().__init__(pos, "endfunctionblock.png", "", list, move_left=18)
+        list = BlockElementList((("Tagasta",2,7),(10,75,10,"argbox")))
+        super().__init__(pos, "endfunctionblock.png", "return {0}", list, move_left=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
