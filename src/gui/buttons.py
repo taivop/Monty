@@ -6,7 +6,7 @@ __author__ = 'Anti'
 class Button(pygame.sprite.Sprite):
     def __init__(self, string, x, y, width= 105, height=25, border=(255,55,25)): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
-        self.font = pygame.font.Font("OpenSans-Regular.ttf", 14)
+        self.font = pygame.font.Font("resources/OpenSans-Regular.ttf", 14)
         self.text_color = (10,10,10)
         self.fill_color = (255,255,255)
         self.border_color = border

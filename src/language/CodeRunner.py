@@ -29,6 +29,8 @@ class CodeRunner:
             code_object = self.compile_tree(tree)
 
             sys.stdout = code_output  # Make the output go to a file-like string object
+
+
             exec(code_object)
             sys.stdout = sys.__stdout__  # Restore stdout
 
