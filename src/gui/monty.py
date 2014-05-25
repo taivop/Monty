@@ -64,12 +64,20 @@ def removeAll(group):
             disconnectParent(item)
     group.empty()
 
-def tryDelete(target,trashbin):
+def deleteBlock(target, trashbin, undobutton, scenebutton):
+    disconnectParent(target)
+    disconnectChild(target)
+    target.kill()
+    undobutton.addBlock(target, scenebutton.current_scene)
+
+def tryDelete(target,trashbin, undobutton, scenebutton):
     if pygame.sprite.collide_rect(target,trashbin):
         children = []
         target.getChildren(children)
         for child in children:
-            child.kill()
+            deleteBlock(child, trashbin, undobutton, scenebutton)
+        return True
+    return False
     
 def main(): # Where we start
 
@@ -243,15 +251,12 @@ def main(): # Where we start
         if event.type == KEYDOWN:
             if event.key == K_DELETE:
                 if last_target != None:
-                    disconnectParent(last_target)
-                    disconnectChild(last_target)
-                    last_target.kill()
-                    undobutton.addBlock(last_target, scenebutton.current_scene)
+                    deleteBlock(last_target, trashbin, undobutton, scenebutton)
                     last_target = None
                     codebox.update(triangle_group)
             if event.key == K_RETURN:
                 runbox.updateRunResult()
-            if event.key == K_TAB:
+            if event.key == K_TAB and len(block_group.sprites()) != 0:
                 if targettext != None:
                     targettext.borderColor = (0,0,0)
                 prev_text = targettext
@@ -289,9 +294,10 @@ def main(): # Where we start
                 triangle.connect(Target)
             codebox.update(triangle_group)
 
-            tryDelete(Target,trashbin);
-
-            last_target = Target
+            if tryDelete(Target,trashbin, undobutton, scenebutton):
+                last_target = None
+            else:
+                last_target = Target
             Target=None # Drop item, if we have any
 
 
