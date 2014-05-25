@@ -1,5 +1,4 @@
 import pygame
-from random import randint # for testing purposes, random color of 3 on every block
 
 import os
 from gui.eztext import Textbox

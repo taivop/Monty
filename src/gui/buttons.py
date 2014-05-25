@@ -4,11 +4,11 @@ from gui.blocks import *
 __author__ = 'Anti'
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, string, x, y, width= 105, height=25): # initialze the properties of the object
+    def __init__(self, string, x, y, width= 105, height=25,border=(255,55,25)): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.Font("OpenSans-Regular.ttf", 14)
-        self.color = (0,0,0)
-        self.borderColor = (0,0,0)
+        self.color = (10,10,10)
+        self.borderColor = border
         self.text = self.font.render(string, 1, self.color)
         self.rect = self.text.get_rect()
         self.rect.width = width
@@ -16,13 +16,13 @@ class Button(pygame.sprite.Sprite):
         self.width = self.rect.width
         self.height = self.rect.height
         self.pos = (x,y)
-        self.rect.x = self.pos[0]-4
+        self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
         self.block_delta_x = 150
 
     def Render(self, screen):
-        screen.blit(self.text, (self.pos[0], self.pos[1]))
         pygame.draw.rect(screen, self.borderColor, self.rect, 2)
+        screen.blit(self.text, (self.pos[0]+((self.width-self.text.get_width())/2), self.pos[1]))
 
 class BlockButton(Button):
     def __init__(self, string, x, y): # initialze the properties of the object
