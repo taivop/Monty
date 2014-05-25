@@ -193,6 +193,7 @@ def main(): # Where we start
                         if triangle.connect(item):
                             break
                 codebox.update(triangle_group)
+                runbox.clear()
             elif mouseIsOn(exitbutton, pos):
                 pygame.quit()
                 break
