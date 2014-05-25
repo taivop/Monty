@@ -39,9 +39,12 @@ Koodist:
 
 
 Tehniline pool:
+
 Pärast sisendikontrolli genereerib Monty igale klotsile vastava koodirea. Neid ridu näidatakse kasutajale ekraanil ja nupu "Käivita!" vajutamisel proovib Monty programmi käivitama hakata.
 Käivitamise protsess näeb välja selline:
 	1. Pythoni AST teegi abil teeb Monty programmikoodist abstraktse süntaksipuu.
 	2. Abstraktne süntaksipuu kompileeritakse...
 	3. ...ja seejärel käivitatakse.
 Kui ükskõik millises neist sammudest tekib erind, püüab Monty selle kinni ja annab kasutajale erindist teada programmi väljundikastis.väljundi kastis punase tekstiga.
+
+Monty lähtekood on jaotatud kahte moodulisse. Moodul gui tegeleb kogu graafilise liidese joonistamise ja haldamisega - see moodustab suurema osa programmi koodist. Moodulist language olevad klassid, peamiselt CodeRunner, tegelevad koodi jooksutamisega.
