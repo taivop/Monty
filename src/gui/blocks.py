@@ -6,6 +6,7 @@ from language.AstHandler import AstHandler
 from gui.DebugHelper import DebugHelper
 from gui.StartTriangle import StartTriangle
 
+
 class Block(pygame.sprite.Sprite): # Something we can create and manipulate
 
     def __init__(self, pos, path, codebox_string, elements, move_right=0, move_left=0): # initialze the properties of the object
@@ -128,6 +129,17 @@ class Block(pygame.sprite.Sprite): # Something we can create and manipulate
         if self.hasParent() and not isinstance(self.parent, StartTriangle):
             self.parent.getAncestors(list)
 
+class HelperBlock(pygame.sprite.Sprite):
+    def __init__(self,top_left_pos,path):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = top_left_pos[0]
+        self.y = top_left_pos[1]
+        self.pos = top_left_pos
+        self.image = pygame.image.load(path)
+
+    def Render(self,screen):
+        screen.blit(self.image,self.pos)
+    
 class BlockElementList():
     def __init__(self, list):
         self.textboxes = []

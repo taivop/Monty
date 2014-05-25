@@ -4,6 +4,7 @@ import os, sys
 sys.path.append(os.path.abspath(".."))
 
 from gui.StartTriangle import StartTriangle
+from gui.DeleteBin import DeleteBin
 from gui.blocks import Block
 from gui.CodeBox import *
 from gui.buttons import *
@@ -63,6 +64,13 @@ def removeAll(group):
             disconnectParent(item)
     group.empty()
 
+def tryDelete(target,trashbin):
+    if pygame.sprite.collide_rect(target,trashbin):
+        children = []
+        target.getChildren(children)
+        for child in children:
+            child.kill()
+    
 def main(): # Where we start
 
     pygame.init()
@@ -86,6 +94,13 @@ def main(): # Where we start
     triangle2 = StartTriangle((255,0,0),[450,0], 20,9)
     triangle_group.add(triangle) # add to list of things to draw
     triangle_group.add(triangle2)
+
+    # Create a helper block
+    helperblock = HelperBlock((triangle.pos[0]-triangle.width/2,triangle.pos[1]),"dragblockshere.png")
+    helperblock2 = HelperBlock((triangle2.pos[0]-triangle2.width/2,triangle2.pos[1]),"andhere.png")
+
+    # Create a trashbin
+    trashbin = DeleteBin((640,540),"trash.png")
 
     # Create run box and code box
     runbox = RunBox()
@@ -265,7 +280,7 @@ def main(): # Where we start
             Target.rect.x, Target.rect.y = Target.pos
             Target.moveChildren()
             bringTargetToFront(Target,block_group) # the blocks on the move are always on top
-
+            
 
         if MouseReleased and Target is not None:
             disconnectParent(Target)
@@ -273,12 +288,20 @@ def main(): # Where we start
             for triangle in triangle_group:
                 triangle.connect(Target)
             codebox.update(triangle_group)
+
+            tryDelete(Target,trashbin);
+
             last_target = Target
             Target=None # Drop item, if we have any
 
 
         # RENDERING
 
+        helperblock.Render(screen)
+        helperblock2.Render(screen)
+        
+        trashbin.Render(screen)
+        
         for item in block_group:
             item.Render(screen) # Draw all items
             for i in range(len(item.elements.textboxes)):
