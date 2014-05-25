@@ -38,6 +38,8 @@ def connectToStart(target,triangle): # connecting to the start triangle
             target.rect.x, target.rect.y = target.pos
             print("connected to start")
             target.moveChildren()
+            return True
+    return False
 
 
 def bringTargetToFront(target,group): # bringing the selected block and its children to front
@@ -67,6 +69,13 @@ def newBlocks(targetbutton, block_group, targettext):
         item.connect(new_blocks)
     return new_blocks[0], None, setTargettext(targettext, new_blocks[0], 0)
 
+def removeAll(group):
+    for item in group:
+        item.kill()
+        if isinstance(item, Block):
+            disconnectChild(item)
+            disconnectParent(item)
+    group.empty()
 
 def main(): # Where we start
 
@@ -80,7 +89,6 @@ def main(): # Where we start
     last_target=None
     targettext=None
     target_block_button=None
-    backup_sprites=[]
 
     block_group = pygame.sprite.LayeredUpdates()     # group for keeping Block objects (IN ORDER)
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
@@ -102,29 +110,34 @@ def main(): # Where we start
 
     # Create run button
     button_x = 600
+    first_y = 10
+    delta_y = 30
+    between_group = 30
 
     runbutton = RunButton()
-    hidebutton = HideButton(button_x, 390)
-    exitbutton = ExitButton("Välju", button_x, 450)
-    savecodebutton = SaveCodeButton("Salvesta", button_x, 360)
-    undobutton = UndoButton("Tagasi", button_x, 420)
+    clearbutton = ClearButton       ("Puhasta", button_x, first_y+11*delta_y+2*between_group)
+    exitbutton = ExitButton         ("Välju",   button_x, first_y+12*delta_y+2*between_group)
+    savecodebutton = SaveCodeButton ("Salvesta",button_x, first_y+8*delta_y+2*between_group)
+    undobutton = UndoButton         ("Tagasi",  button_x, first_y+10*delta_y+2*between_group)
+    scenebutton = SceneButtons      (           button_x, first_y+9*delta_y+2*between_group)
 
-    other_button_group.add(hidebutton)
+    other_button_group.add(clearbutton)
     other_button_group.add(exitbutton)
     other_button_group.add(runbutton)
     other_button_group.add(savecodebutton)
     other_button_group.add(undobutton)
+    other_button_group.add(scenebutton)
 
 
-    assignButton = AssignButton(button_x, 40)
-    printButton = PrintButton(button_x, 70)
-    ifButton = IfButton(button_x, 100)
-    whileButton = WhileButton(button_x, 130)
+    assignButton = AssignButton(button_x, first_y)
+    printButton = PrintButton(button_x, first_y+1*delta_y)
+    ifButton = IfButton(button_x, first_y+2*delta_y)
+    whileButton = WhileButton(button_x, first_y+3*delta_y)
 
-    forwardButton = ForwardButton(button_x, 200)
-    backButton = BackButton(button_x, 230)
-    leftButton = LeftButton(button_x, 260)
-    rightButton = RightButton(button_x, 290)
+    forwardButton = ForwardButton(button_x, first_y+4*delta_y+1*between_group)
+    backButton = BackButton(button_x, first_y+5*delta_y+1*between_group)
+    leftButton = LeftButton(button_x, first_y+6*delta_y+1*between_group)
+    rightButton = RightButton(button_x, first_y+7*delta_y+1*between_group)
 
     block_button_group.add(assignButton)
     block_button_group.add(printButton)
@@ -171,29 +184,37 @@ def main(): # Where we start
                     target_block_button = item
                     break
 
-            if mouseIsOn(hidebutton, pos):
-                if not hidebutton.hidden:
-                    hidebutton.hide(block_group)
-                    disconnectChild(triangle)
-                else:
-                    hidebutton.show(block_group, connectToStart, triangle)
+            # Other button "listeners"
+
+            if mouseIsOn(clearbutton, pos):
+                removeAll(block_group)
+                removeAll(other_button_group)
+                removeAll(block_button_group)
+                removeAll(other_group)
+                return True
+            elif mouseIsOn(scenebutton, pos):
+                scenebutton.onClick(block_group)
+                disconnectChild(triangle)
+                for item in block_group:
+                    if connectToStart(item, triangle):
+                        break
                 codebox.update(triangle)
             elif mouseIsOn(exitbutton, pos):
                 pygame.quit()
                 break
             elif mouseIsOn(savecodebutton, pos):
-                f=open("fail.py", 'w')
-                f.write(runbox.getProgramText())
-                f.close()
+                text = runbox.getProgramText()
+                if text != '':
+                    f=open("fail.py", 'w')
+                    f.write(text)
+                    f.close()
             elif mouseIsOn(undobutton, pos):
-                item = undobutton.undo(block_group)
+                item = undobutton.undo(block_group, scenebutton.current_scene)
                 if item != None:
                     connectToStart(item, triangle)
                     if last_target == None:
                         last_target = item
                     codebox.update(triangle)
-
-            # if run button was pressed:
             elif mouseIsOn(runbutton, pos):
                 runbox.updateRunResult()
 
@@ -212,7 +233,7 @@ def main(): # Where we start
                     disconnectParent(last_target)
                     disconnectChild(last_target)
                     last_target.kill()
-                    undobutton.addBlock(last_target)
+                    undobutton.addBlock(last_target, scenebutton.current_scene)
                     last_target = None
                     codebox.update(triangle)
             if event.key == K_RETURN:
@@ -276,7 +297,9 @@ def main(): # Where we start
 
         MousePressed = False # Reset these to False
         MouseReleased = False # Ditto
-    return # End of function
+    return False # End of function
     
 if __name__ == '__main__': # Are we RUNNING from this module?
-    main() # Execute our main function
+    running = True
+    while running:
+        running = main() # Execute our main function

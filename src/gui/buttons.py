@@ -4,15 +4,15 @@ from gui.blocks import *
 __author__ = 'Anti'
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, string, x, y): # initialze the properties of the object
+    def __init__(self, string, x, y, width= 90, height=25): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
         self.color = (0,0,0)
         self.borderColor = (0,0,0)
         self.text = self.font.render(string, 1, self.color)
         self.rect = self.text.get_rect()
-        self.rect.width = 90
-        self.rect.height = 25
+        self.rect.width = width
+        self.rect.height = height
         self.width = self.rect.width
         self.height = self.rect.height
         self.pos = (x,y)
@@ -29,27 +29,31 @@ class BlockButton(Button):
         super().__init__(string, x, y)
         self.block_delta_x = 150
 
-class HideButton(Button):
+class SceneButtons(Button):
     def __init__(self, x, y):
-        super().__init__("Peida", x, y)
-        self.hidden = False
-        self.hide_text = "Peida"
-        self.show_text = "Näita"
-        self.backup_sprites=[]
+        super().__init__("Stseen 1", x, y)
+        self.backup_sprites = []
+        self.backup_sprites.append([])
+        self.backup_sprites.append([])
+        self.backup_sprites.append([])
+        self.current_scene = 1
 
-    def hide(self, block_group):
-        self.hidden = True
-        self.text = self.font.render(self.show_text, 1, self.color)
-        self.backup_sprites=block_group.sprites()
+    def onClick(self, block_group):
+        i = self.current_scene-1
+        self.backup_sprites[i] = block_group.sprites()
         block_group.empty()
-
-    def show(self, block_group, connectToStart, triangle):
-        self.hidden = False
-        self.text = self.font.render(self.hide_text, 1, self.color)
-        for item in self.backup_sprites:
+        if i == len(self.backup_sprites)-1:
+            self.current_scene = 1
+        else:
+            self.current_scene += 1
+        self.text = self.font.render("Stseen "+str(self.current_scene), 1, self.color)
+        for item in self.backup_sprites[self.current_scene-1]:
             block_group.add(item)
             item.connect(block_group)
-            connectToStart(item, triangle)
+
+class ClearButton(Button):
+    def __init__(self, string, x, y):
+        super().__init__(string, x, y)
 
 class ExitButton(Button):
     def __init__(self, string, x, y):
@@ -60,13 +64,16 @@ class UndoButton(Button):
     def __init__(self, string, x, y):
         super().__init__(string, x, y)
         self.backup_sprite = []
+        self.backup_sprite.append([])
+        self.backup_sprite.append([])
+        self.backup_sprite.append([])
 
-    def addBlock(self, block):
-        self.backup_sprite.append(block)
+    def addBlock(self, block, scene):
+        self.backup_sprite[scene-1].append(block)
 
-    def undo(self,block_group):
-        if len(self.backup_sprite) > 0:
-            item = self.backup_sprite.pop()
+    def undo(self,block_group, scene):
+        if len(self.backup_sprite[scene-1]) > 0:
+            item = self.backup_sprite[scene-1].pop()
             block_group.add(item)
             item.connect(block_group)
             return item
