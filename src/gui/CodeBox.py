@@ -104,7 +104,7 @@ class RunBox(pygame.sprite.Sprite):
     run_error = ""
 
     errorExplanations = {
-        "SyntaxError":  "Süntaksi viga\n* kontrolli programm üle!\n*kas kastid on täidetud?",
+        "SyntaxError":  "Süntaksi viga\n*kontrolli programm üle!\n*kas kastid on täidetud?",
         "NameError": "Nimeerind\n*kas kasutatavad muutujad\non ikka väärtustatud?",
         "IndentationError" : "Taandeerind\n* ega mõni tsükkel või\nvalik tühi pole?"
     }
