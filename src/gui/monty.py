@@ -83,6 +83,7 @@ def main(): # Where we start
 
     pygame.init()
     screen=pygame.display.set_mode((1000,600))
+    pygame.display.set_caption("Monty")
     running=True
     MousePressed=False # Pressed down THIS FRAME
     MouseDown=False # mouse is held down
