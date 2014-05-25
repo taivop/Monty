@@ -125,7 +125,7 @@ class RunBox(pygame.sprite.Sprite):
                 addTurtle = True
 
         if addTurtle:
-            programText += "from turtle import bk, fd, lt, rt, exitonclick\n"
+            programText += "from turtle import *\n"
 
         # Add all program lines
         for line in self.codebox.lineList:
@@ -137,15 +137,42 @@ class RunBox(pygame.sprite.Sprite):
         return programText
 
     def updateRunResult(self):
+       # Get program text
+        programText = ""
+        function_names = []
 
-        programText = self.getProgramText()
+        # If we have any turtle statements, add turtle import
+        addTurtle = False
+        for block in self.codebox.blockList:
+            name = block.__class__.__name__
+            if name == "ForwardBlock" or name == "RightBlock" or name == "LeftBlock" or name == "BackBlock":
+                addTurtle = True
+            elif name == "FunctionBlock":
+                function_names.append(block.elements.getTextbox(0).getValue())
 
+
+        if addTurtle:
+            programText += "from turtle import *\n"
+            #function_names.extend(["fd","bk","lt","rt","exitonclick"])
+        if len(function_names) != 0:
+            programText += "global " + ",".join(function_names)+"\n"
+
+
+        # Add all program lines
+        for line in self.codebox.lineList:
+            programText += line + "\n"
+
+        if addTurtle:
+            programText += "exitonclick()\n"
+
+        print(programText)
         result = self.coderunner.execute(programText)
         self.run_output = result[0]
         self.run_error = result[1]
         print(self.run_error)
 
-
+    def clear(self):
+        self.run_output = ""
 
     def Render(self,screen):
 
