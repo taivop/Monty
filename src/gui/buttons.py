@@ -116,11 +116,19 @@ class WhileButton(BlockButton):
     def newBlocks(self):
         return [WhileBlock((self.pos[0]-self.block_delta_x, self.pos[1])),
                 EndWhileBlock((self.pos[0]-self.block_delta_x, self.pos[1]+30))]
+class ForButton(BlockButton):
+    def __init__(self, x, y):
+        super().__init__("Kordus", x, y)
+        self.hotkey = K_F5
+
+    def newBlocks(self):
+        return [ForBlock((self.pos[0]-self.block_delta_x, self.pos[1])),
+                EndForBlock((self.pos[0]-self.block_delta_x, self.pos[1]+30))]
 
 class FunctionButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Funktsioon", x, y)
-        self.hotkey = K_F4
+        self.hotkey = K_F6
 
     def newBlocks(self):
         return [FunctionBlock((self.pos[0]-self.block_delta_x, self.pos[1])),
@@ -129,7 +137,7 @@ class FunctionButton(BlockButton):
 class EmptyButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Tühi", x, y)
-        self.hotkey = K_F4
+        self.hotkey = K_F7
 
     def newBlocks(self):
         return [EmptyBlock((self.pos[0]-self.block_delta_x, self.pos[1]))]
@@ -137,7 +145,7 @@ class EmptyButton(BlockButton):
 class ForwardButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Edasi", x, y)
-        self.hotkey = K_F5
+        self.hotkey = K_F8
 
     def newBlocks(self):
         return [ForwardBlock((self.pos[0]-self.block_delta_x, self.pos[1]))]
@@ -145,7 +153,7 @@ class ForwardButton(BlockButton):
 class BackButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Tagasi", x, y)
-        self.hotkey = K_F6
+        self.hotkey = K_F9
 
     def newBlocks(self):
         return [BackBlock((self.pos[0]-self.block_delta_x, self.pos[1]))]
@@ -153,7 +161,7 @@ class BackButton(BlockButton):
 class LeftButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Vasakule", x, y)
-        self.hotkey = K_F7
+        self.hotkey = K_F10
 
     def newBlocks(self):
         return [LeftBlock((self.pos[0]-self.block_delta_x, self.pos[1]))]
@@ -161,7 +169,7 @@ class LeftButton(BlockButton):
 class RightButton(BlockButton):
     def __init__(self, x, y):
         super().__init__("Paremale", x, y)
-        self.hotkey = K_F8
+        self.hotkey = K_F11
 
     def newBlocks(self):
         return [RightBlock((self.pos[0]-self.block_delta_x, self.pos[1]))]

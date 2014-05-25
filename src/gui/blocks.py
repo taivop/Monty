@@ -322,3 +322,23 @@ class EmptyBlock(Block):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
         (tree, error) = AstHandler.codeToAst(self.getText())
         return tree.body[0]
+
+class ForBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList(((9,40,10),("Tee",2,7),("korda",146,7)))
+        super().__init__(pos, "block4.png", "for _ in range({0}):", list, move_right=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class EndForBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList((("Jätka siit",2,7),))
+        super().__init__(pos, "block5.png", "", list, move_left=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
