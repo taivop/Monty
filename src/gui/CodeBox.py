@@ -59,21 +59,22 @@ class CodeBox(pygame.sprite.Sprite):
         indent = 0
         for block in self.blockList:
             self.lineList.append(indent * "  " + block.getText())
-            if block.__class__.__name__ == "IfBlock" or block.__class__.__name__ == "WhileBlock":
+            if block.__class__.__name__ == "IfBlock" or block.__class__.__name__ == "WhileBlock" or block.__class__.__name__ == "FunctionBlock":
                 indent += 1
-            elif block.__class__.__name__ == "EndIfBlock" or block.__class__.__name__ == "EndWhileBlock" :
+            elif block.__class__.__name__ == "EndIfBlock" or block.__class__.__name__ == "EndWhileBlock" or block.__class__.__name__== "EndFunctionBlock":
                 indent -= 1
 
-    def update(self, triangle):
-        if triangle.child != None:
-            children = []
-            triangle.child.getChildren(children)
-            if self.start_triangle_child_count != len(children):
-                self.blockList = children
-                self.start_triangle_child_count = len(children)
-        else:
-            self.blockList = []
-            self.start_triangle_child_count = 0
+    def update(self, triangle_group):
+        self.blockList = []
+        children = []
+        for triangle in triangle_group:
+            if triangle.child != None:
+                children = []
+                triangle.child.getChildren(children)
+                #if self.start_triangle_child_count != len(children):
+                self.blockList.extend(children)
+        self.start_triangle_child_count = len(children)
+
 
 
 class RunBox(pygame.sprite.Sprite):
@@ -122,7 +123,7 @@ class RunBox(pygame.sprite.Sprite):
                 addTurtle = True
 
         if addTurtle:
-            programText += "from turtle import *\n"
+            programText += "from turtle import bk, fd, lt, rt, exitonclick\n"
 
         # Add all program lines
         for line in self.codebox.lineList:

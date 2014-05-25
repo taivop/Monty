@@ -3,13 +3,15 @@ from pygame.locals import *
 import pygame, string
 
 class Textbox():
-    def __init__(self, length, varbox=False, ifbox=False):
+    def __init__(self, length, info=''):
         self.length = length
         self.height = 20
-        if varbox:
+        if info == "varbox":
             self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', info='varbox')
-        elif ifbox:
+        elif info == "ifbox":
             self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>"\'', info='ifbox')
+        elif info == "argbox":
+            self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>"\',.', info='argbox')
         else:
             self.txtbx = Input(maxlength=length, color=(255,255,255), prompt='', restricted='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()/*-+=!<>"\'')
         self.borderColor = (0,0,0)
@@ -68,7 +70,10 @@ class Input:
 
     def draw(self, surface):
         """ Draw the text input to a surface """
-        text = self.font.render(self.prompt+self.value, 1, self.color)
+        value=self.value
+        if len(self.value) > self.maxlength:
+            value = value[len(value)-self.maxlength:]
+        text = self.font.render(self.prompt+value, 1, self.color)
         surface.blit(text, (self.x, self.y))
 
     def update(self, event):
@@ -98,6 +103,8 @@ class Input:
             elif char == '>' and '>' in self.restricted: self.value += '>'
             elif char == '"' and '"' in self.restricted: self.value += '"'
             elif char == '\'' and '\'' in self.restricted: self.value += '\''
+            elif char == '.' and '.' in self.restricted: self.value += '.'
+            elif char == ',' and ',' in self.restricted: self.value += ','
             if not self.shifted:
                 if event.key == K_a and 'a' in self.restricted: self.value += 'a'
                 elif event.key == K_b and 'b' in self.restricted: self.value += 'b'
@@ -195,4 +202,4 @@ class Input:
                 # elif event.key == K_PERIOD and '>' in self.restricted: self.value += '>'
                 # elif event.key == K_SLASH and '?' in self.restricted: self.value += '?'
 
-        if len(self.value) > self.maxlength and self.maxlength >= 0: self.value = self.value[:-1]
+        #if len(self.value) > self.maxlength and self.maxlength >= 0: self.value = self.value[:-1]

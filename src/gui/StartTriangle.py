@@ -23,3 +23,14 @@ class StartTriangle(pygame.sprite.Sprite):
 
     def hasChild(self):
         return self.child is not None
+
+    def connect(self,target):
+        if pygame.sprite.collide_rect(target,self):
+            if not self.hasChild():
+                self.child = target
+                target.parent = self
+                target.pos = self.x-10, self.y
+                target.rect.x, target.rect.y = target.pos
+                target.moveChildren()
+                return True
+        return False

@@ -13,13 +13,11 @@ def disconnectParent(block):
     if block.hasParent():
         block.parent.child = None
         block.parent = None
-    print("disconnected blocks")
 
 def disconnectChild(block):
     if block.hasChild():
         block.child.parent = None
         block.child = None
-    print("disconnected blocks")
 
 def mouseIsOn(item, mouse_pos):
     """ Check if mouse (at mouse_pos) is on the item.
@@ -27,18 +25,6 @@ def mouseIsOn(item, mouse_pos):
     if (item.pos[0]) <= mouse_pos[0] <= (item.pos[0]+item.width) and\
                             (item.pos[1]+item.height) >= mouse_pos[1] >= (item.pos[1]):
         return True
-    return False
-
-def connectToStart(target,triangle): # connecting to the start triangle
-    if pygame.sprite.collide_rect(target,triangle):
-        if not triangle.hasChild():
-            triangle.child = target
-            target.parent = triangle
-            target.pos = triangle.x-10, triangle.y
-            target.rect.x, target.rect.y = target.pos
-            print("connected to start")
-            target.moveChildren()
-            return True
     return False
 
 
@@ -94,9 +80,12 @@ def main(): # Where we start
     other_group = pygame.sprite.Group()     # group for keeping any other renderable objects
     block_button_group = pygame.sprite.Group()
     other_button_group = pygame.sprite.Group()
+    triangle_group = pygame.sprite.Group()
 
     triangle=StartTriangle((0,255,0),[10,0], 20,9) # create a new one
-    other_group.add(triangle) # add to list of things to draw
+    triangle2 = StartTriangle((255,0,0),[300,0], 20,9)
+    triangle_group.add(triangle) # add to list of things to draw
+    triangle_group.add(triangle2)
 
     # Create run box and code box
     runbox = RunBox()
@@ -109,17 +98,17 @@ def main(): # Where we start
     runbox.codebox = codebox
 
     # Create run button
-    button_x = 600
+    button_x = 595
     first_y = 10
     delta_y = 30
     between_group = 30
 
     runbutton = RunButton()
-    clearbutton = ClearButton       ("Puhasta", button_x, first_y+11*delta_y+2*between_group)
-    exitbutton = ExitButton         ("Välju",   button_x, first_y+12*delta_y+2*between_group)
-    savecodebutton = SaveCodeButton ("Salvesta",button_x, first_y+8*delta_y+2*between_group)
-    undobutton = UndoButton         ("Tagasi",  button_x, first_y+10*delta_y+2*between_group)
-    scenebutton = SceneButtons      (           button_x, first_y+9*delta_y+2*between_group)
+    clearbutton = ClearButton       ("Puhasta", button_x, first_y+13*delta_y+2*between_group)
+    exitbutton = ExitButton         ("Välju",   button_x, first_y+14*delta_y+2*between_group)
+    savecodebutton = SaveCodeButton ("Salvesta",button_x, first_y+10*delta_y+2*between_group)
+    undobutton = UndoButton         ("Tagasi",  button_x, first_y+12*delta_y+2*between_group)
+    scenebutton = SceneButtons      (           button_x, first_y+11*delta_y+2*between_group)
 
     other_button_group.add(clearbutton)
     other_button_group.add(exitbutton)
@@ -133,11 +122,13 @@ def main(): # Where we start
     printButton = PrintButton(button_x, first_y+1*delta_y)
     ifButton = IfButton(button_x, first_y+2*delta_y)
     whileButton = WhileButton(button_x, first_y+3*delta_y)
+    functionbutton = FunctionButton(button_x, first_y+4*delta_y)
+    emptybutton = EmptyButton(button_x, first_y+5*delta_y)
 
-    forwardButton = ForwardButton(button_x, first_y+4*delta_y+1*between_group)
-    backButton = BackButton(button_x, first_y+5*delta_y+1*between_group)
-    leftButton = LeftButton(button_x, first_y+6*delta_y+1*between_group)
-    rightButton = RightButton(button_x, first_y+7*delta_y+1*between_group)
+    forwardButton = ForwardButton(button_x, first_y+7*delta_y+1*between_group)
+    backButton = BackButton(button_x, first_y+6*delta_y+1*between_group)
+    leftButton = LeftButton(button_x, first_y+8*delta_y+1*between_group)
+    rightButton = RightButton(button_x, first_y+9*delta_y+1*between_group)
 
     block_button_group.add(assignButton)
     block_button_group.add(printButton)
@@ -147,6 +138,8 @@ def main(): # Where we start
     block_button_group.add(ifButton)
     block_button_group.add(whileButton)
     block_button_group.add(backButton)
+    block_button_group.add(functionbutton)
+    block_button_group.add(emptybutton)
 
     while running:
         
@@ -194,27 +187,29 @@ def main(): # Where we start
                 return True
             elif mouseIsOn(scenebutton, pos):
                 scenebutton.onClick(block_group)
-                disconnectChild(triangle)
-                for item in block_group:
-                    if connectToStart(item, triangle):
-                        break
-                codebox.update(triangle)
+                for triangle in triangle_group:
+                    disconnectChild(triangle)
+                    for item in block_group:
+                        if triangle.connect(item):
+                            break
+                codebox.update(triangle_group)
             elif mouseIsOn(exitbutton, pos):
                 pygame.quit()
                 break
             elif mouseIsOn(savecodebutton, pos):
                 text = runbox.getProgramText()
                 if text != '':
-                    f=open("fail.py", 'w')
+                    f=open("stseen"+str(scenebutton.current_scene)+".py", 'w')
                     f.write(text)
                     f.close()
             elif mouseIsOn(undobutton, pos):
                 item = undobutton.undo(block_group, scenebutton.current_scene)
                 if item != None:
-                    connectToStart(item, triangle)
-                    if last_target == None:
-                        last_target = item
-                    codebox.update(triangle)
+                    for triangle in triangle_group:
+                        triangle.connect(item)
+                        if last_target == None:
+                            last_target = item
+                    codebox.update(triangle_group)
             elif mouseIsOn(runbutton, pos):
                 runbox.updateRunResult()
 
@@ -235,17 +230,24 @@ def main(): # Where we start
                     last_target.kill()
                     undobutton.addBlock(last_target, scenebutton.current_scene)
                     last_target = None
-                    codebox.update(triangle)
+                    codebox.update(triangle_group)
             if event.key == K_RETURN:
                 runbox.updateRunResult()
             if event.key == K_TAB:
-                if targettext != None and last_target != None:
+                if targettext != None:
                     targettext.borderColor = (0,0,0)
-                    prev = targettext
+                prev_text = targettext
+                prev_block = last_target
+                if last_target != None:
                     targettext, last_target = last_target.changeTextbox(targettext)
-                    if targettext == None:
-                        targettext = prev
+                else:
+                    last_target = block_group.sprites()[0]
+                if targettext == None:
+                    targettext = prev_text
+                else:
                     targettext.borderColor = (255,255,255)
+                if last_target == None:
+                    last_target=prev_block
             for item in block_button_group:
                 if item.hotkey == event.key:
                     target_block_button = item
@@ -265,8 +267,9 @@ def main(): # Where we start
         if MouseReleased and Target is not None:
             disconnectParent(Target)
             Target.connect(block_group)
-            connectToStart(Target, triangle)
-            codebox.update(triangle)
+            for triangle in triangle_group:
+                triangle.connect(Target)
+            codebox.update(triangle_group)
             last_target = Target
             Target=None # Drop item, if we have any
 
@@ -289,6 +292,9 @@ def main(): # Where we start
             item.Render(screen)
 
         for item in other_button_group:
+            item.Render(screen)
+
+        for item in triangle_group:
             item.Render(screen)
             
         pygame.display.flip()

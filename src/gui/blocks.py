@@ -165,12 +165,7 @@ class BlockElement():
 class TextboxElement(BlockElement):
     def __init__(self, item):
         super().__init__(item)
-        if self.info == "ifbox":
-            self.pointer = Textbox(self.value, ifbox=True)
-        elif self.info == "varbox":
-            self.pointer = Textbox(self.value, varbox=True)
-        else:
-            self.pointer = Textbox(self.value)
+        self.pointer = Textbox(self.value, self.info)
 
     def Render(self, screen, x, y):
         self.pointer.Render(screen, x+self.x, y+self.y)
@@ -291,6 +286,37 @@ class EndWhileBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Kui jah, kordame",2,7),))
         super().__init__(pos, "block5.png", "", list, move_left=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+
+class FunctionBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList(((7,2,10,"varbox"),("(",90,7),(7,100,10,"argbox"),(")",185,7)))
+        super().__init__(pos, "block4.png", "def {0} ({1}):", list, move_right=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class EndFunctionBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList((("Funktsiooni lõpp",2,7),))
+        super().__init__(pos, "block5.png", "", list, move_left=18)
+
+    def getAstNode(self):
+        # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
+        (tree, error) = AstHandler.codeToAst(self.getText())
+        return tree.body[0]
+
+class EmptyBlock(Block):
+    def __init__(self, pos):
+        list = BlockElementList(((17,2,10,"argbox"),))
+        super().__init__(pos, "block1.png", "{0}", list)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!

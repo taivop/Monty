@@ -4,7 +4,7 @@ from gui.blocks import *
 __author__ = 'Anti'
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, string, x, y, width= 90, height=25): # initialze the properties of the object
+    def __init__(self, string, x, y, width= 105, height=25): # initialze the properties of the object
         pygame.sprite.Sprite.__init__(self)
         self.font = pygame.font.Font("OpenSans-Regular.ttf", 18)
         self.color = (0,0,0)
@@ -116,6 +116,23 @@ class WhileButton(BlockButton):
     def newBlocks(self):
         return [WhileBlock((self.pos[0]-self.block_delta_x, self.pos[1])),
                 EndWhileBlock((self.pos[0]-self.block_delta_x, self.pos[1]+30))]
+
+class FunctionButton(BlockButton):
+    def __init__(self, x, y):
+        super().__init__("Funktsioon", x, y)
+        self.hotkey = K_F4
+
+    def newBlocks(self):
+        return [FunctionBlock((self.pos[0]-self.block_delta_x, self.pos[1])),
+                EndFunctionBlock((self.pos[0]-self.block_delta_x, self.pos[1]+30))]
+
+class EmptyButton(BlockButton):
+    def __init__(self, x, y):
+        super().__init__("Tühi", x, y)
+        self.hotkey = K_F4
+
+    def newBlocks(self):
+        return [EmptyBlock((self.pos[0]-self.block_delta_x, self.pos[1]))]
 
 class ForwardButton(BlockButton):
     def __init__(self, x, y):
