@@ -337,7 +337,6 @@ class EndForBlock(Block):
     def __init__(self, pos):
         list = BlockElementList((("Jätka siit",2,7),))
         super().__init__(pos, "block5.png", "", list, move_left=18)
-
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
         (tree, error) = AstHandler.codeToAst(self.getText())
