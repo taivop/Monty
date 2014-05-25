@@ -306,8 +306,8 @@ class EndWhileBlock(Block):
 
 class FunctionBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Tagasta",2,7),(10,75,10,"argbox")))
-        super().__init__(pos, "resources/functionblock.png", "return {0}", list, move_right=18)
+        list = BlockElementList(((7,2,10,"varbox"),("(",90,7),(7,100,10,"argbox"),(")",185,7)))
+        super().__init__(pos, "resources/functionblock.png", "def {0} ({1}):", list, move_right=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
@@ -316,8 +316,8 @@ class FunctionBlock(Block):
 
 class EndFunctionBlock(Block):
     def __init__(self, pos):
-        list = BlockElementList((("Funktsiooni lõpp",2,7),))
-        super().__init__(pos, "resources/endfunctionblock.png", "", list, move_left=18)
+        list = BlockElementList((("Tagasta",2,7),(10,75,10,"argbox")))
+        super().__init__(pos, "resources/functionblock.png", "return {0}", list, move_right=18)
 
     def getAstNode(self):
         # TODO: security risk if expressions contains unwanted code => should sanitise/restrict input!
