@@ -96,7 +96,7 @@ class Input:
             elif char == '/' and '/' in self.restricted: self.value += '/'
             elif char == '!' and '!' in self.restricted: self.value += '!'
             elif char == '=' and '=' in self.restricted and self.info == "ifbox" and len(self.value) > 0 and \
-            (self.value[len(self.value)-1] == '<' or self.value[len(self.value)-1] == '>'): self.value += '='
+            (self.value[len(self.value)-1] == '<' or self.value[len(self.value)-1] == '>' or self.value[len(self.value)-1] == '!'): self.value += '='
             elif char == '=' and '=' in self.restricted and self.info == "ifbox": self.value += '=='
             elif char == '=' and '=' in self.restricted: self.value += '='
             elif char == '<' and '<' in self.restricted: self.value += '<'

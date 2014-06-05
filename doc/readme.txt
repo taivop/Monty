@@ -1,52 +1,53 @@
 Monty
 
 Autorid: Anti Ingel, Taivo Pungas, Oliver Viljamaa
-Tartu Ülikool, 2014
+Tartu ï¿½likool, 2014
 
-Monty on 2014. aasta kevadsemestril aine Automaadid, keeled ja translaatorid (MTAT.05.085) raames tehtud projekt, mille eesmärgiks on lihtsustada programmeerimise õppimist.
+Monty on 2014. aasta kevadsemestril aine Automaadid, keeled ja translaatorid (MTAT.05.085) raames tehtud projekt, mille eesmï¿½rgiks on lihtsustada programmeerimise ï¿½ppimist.
 
-Programm kujutab endast analoogselt Scratchile või Code.org-ile ala, millele kindlate funktsioonidega klotse vedades ja omavahel kombineerides koostatakse vastav programmijupp, mida kõrvalaknas ka kuvatakse. See muudab tutvumise nii programmeerimisega kui ka konkreetselt keelega Python lihtsamaks ja lõbusamaks.
+Programm kujutab endast analoogselt Scratchile vï¿½i Code.org-ile ala, millele kindlate funktsioonidega klotse vedades ja omavahel kombineerides koostatakse vastav programmijupp, mida kï¿½rvalaknas ka kuvatakse. See muudab tutvumise nii programmeerimisega kui ka konkreetselt keelega Python lihtsamaks ja lï¿½busamaks.
 
 Eeldused:
 * Python 3.1.1 - allalaetav: https://www.python.org/download/releases/3.1.1
 * Pygame 1.9.1 for Python 3.1 - allalaetav: http://pygame.org/download.shtml
+(Muud Python 3 vÃµi Pygame versioonid vÃµivad tÃ¶Ã¶tada, aga ei ole testitud.)
 
 Kasutamine:
 
-1. Monty käivitamiseks tuleb Pythoni 3.1 versioonis jooksutada faili gui/monty.py.
+1. Monty kï¿½ivitamiseks tuleb Pythoni 3.1 versioonis jooksutada faili gui/monty.py.
 2. Programmi kasutamine:
 	* vasakul servas on erinevad nupud, mis on jaotatud gruppidesse
-	* esimese grupi klotsidele vajutades või nendelt vedades ilmub alale vastava funktsiooniga klots
+	* esimese grupi klotsidele vajutades vï¿½i nendelt vedades ilmub alale vastava funktsiooniga klots
 	  (klotse saab tekitada ka funktsiooniklahvidega)
-	* teise grupi klotsid on analoogsed, kuid vastavad Pythoni turtle joonistusteegi lihtsamatele käskudele
-	* kolmanda grupi klotsid kujutavad endast üldiseid käske programmi salvestamiseks, stseeni vahetuseks
-	  (et hallata saaks mitut programmijuppi), tagasiliikumiseks, ekraani klotsidest tühjendamiseks ning väljumiseks
-	* klotsid tuleb programmi osaks tegemiseks lohistada ekraani ülalosas olevate kolmnurkadeni
-	* klotsidel olevaid kaste saab täita vastavate väärtustega, näiteks kordustsükli ehk for-tsükli puhul
-	  väärtustatud muutujaga või täisarvuga
-	* aktiivse tekstikasti tunneb kasutaja ära valge ääre järgi ning kahe kastiga klotsidel töötab kastivahetuseks TAB-nupp
-	* klotse üksteise peale lohistades klotsid haakuvad ning grupi kõige ülemisest klotsist vedades liiguvad kõik
-	* klotsi kustutamiseks võib aktiivse klotsi (klotsi, millel olev kast on valge) kustutada vajutades DELETE-nuppu
-	  või lohistades selle all paremas nurgas oleva prügikastini
-	* paremal üleval nurgas kuvatakse klotsidest valmistatud programmile vastavat Python-koodi, mida uuendatakse iga muutuse järel
-	* vajutades nuppu "Käivita!" või vajutades ENTER-klahvi kuvatakse ka vastava programmi väljundit või vea puhul lihtsaid soovitusi
-	* programmist saab väljuda kas vasakul all servas olevat "Välju" nuppu vajutades, ESC-klahvi vajutades või programmi ristist sulgedes
+	* teise grupi klotsid on analoogsed, kuid vastavad Pythoni turtle joonistusteegi lihtsamatele kï¿½skudele
+	* kolmanda grupi klotsid kujutavad endast ï¿½ldiseid kï¿½ske programmi salvestamiseks, stseeni vahetuseks
+	  (et hallata saaks mitut programmijuppi), tagasiliikumiseks, ekraani klotsidest tï¿½hjendamiseks ning vï¿½ljumiseks
+	* klotsid tuleb programmi osaks tegemiseks lohistada ekraani ï¿½lalosas olevate kolmnurkadeni
+	* klotsidel olevaid kaste saab tï¿½ita vastavate vï¿½ï¿½rtustega, nï¿½iteks kordustsï¿½kli ehk for-tsï¿½kli puhul
+	  vï¿½ï¿½rtustatud muutujaga vï¿½i tï¿½isarvuga
+	* aktiivse tekstikasti tunneb kasutaja ï¿½ra valge ï¿½ï¿½re jï¿½rgi ning kahe kastiga klotsidel tï¿½ï¿½tab kastivahetuseks TAB-nupp
+	* klotse ï¿½ksteise peale lohistades klotsid haakuvad ning grupi kï¿½ige ï¿½lemisest klotsist vedades liiguvad kï¿½ik
+	* klotsi kustutamiseks vï¿½ib aktiivse klotsi (klotsi, millel olev kast on valge) kustutada vajutades DELETE-nuppu
+	  vï¿½i lohistades selle all paremas nurgas oleva prï¿½gikastini
+	* paremal ï¿½leval nurgas kuvatakse klotsidest valmistatud programmile vastavat Python-koodi, mida uuendatakse iga muutuse jï¿½rel
+	* vajutades nuppu "Kï¿½ivita!" vï¿½i vajutades ENTER-klahvi kuvatakse ka vastava programmi vï¿½ljundit vï¿½i vea puhul lihtsaid soovitusi
+	* programmist saab vï¿½ljuda kas vasakul all servas olevat "Vï¿½lju" nuppu vajutades, ESC-klahvi vajutades vï¿½i programmi ristist sulgedes
 
 Koodist:
 
-* programmi kood on kättesaadav GitHubi repositooriumist aadressil https://github.com/taivop/Monty
-* kood ja erinevad lisafailid on jaotatud erinevatesse kaustadesse vastavalt faili tüüpidele ja sisule
+* programmi kood on kï¿½ttesaadav GitHubi repositooriumist aadressil https://github.com/taivop/Monty
+* kood ja erinevad lisafailid on jaotatud erinevatesse kaustadesse vastavalt faili tï¿½ï¿½pidele ja sisule
 
 
 Tehniline pool:
 
-Pärast sisendikontrolli genereerib Monty igale klotsile vastava koodirea. Neid ridu näidatakse kasutajale ekraanil ja nupu "Käivita!" vajutamisel proovib Monty programmi käivitama hakata.
-Käivitamise protsess näeb välja selline:
-	1. Pythoni AST teegi abil teeb Monty programmikoodist abstraktse süntaksipuu.
-	2. Abstraktne süntaksipuu kompileeritakse...
-	3. ...ja seejärel käivitatakse.
-Kui ükskõik millises neist sammudest tekib erind, püüab Monty selle kinni ja annab kasutajale erindist teada programmi väljundikastis.väljundi kastis punase tekstiga.
+Pï¿½rast sisendikontrolli genereerib Monty igale klotsile vastava koodirea. Neid ridu nï¿½idatakse kasutajale ekraanil ja nupu "Kï¿½ivita!" vajutamisel proovib Monty programmi kï¿½ivitama hakata.
+Kï¿½ivitamise protsess nï¿½eb vï¿½lja selline:
+	1. Pythoni AST teegi abil teeb Monty programmikoodist abstraktse sï¿½ntaksipuu.
+	2. Abstraktne sï¿½ntaksipuu kompileeritakse...
+	3. ...ja seejï¿½rel kï¿½ivitatakse.
+Kui ï¿½kskï¿½ik millises neist sammudest tekib erind, pï¿½ï¿½ab Monty selle kinni ja annab kasutajale erindist teada programmi vï¿½ljundikastis.vï¿½ljundi kastis punase tekstiga.
 
-Monty lähtekood on jaotatud kahte moodulisse. Moodul gui tegeleb kogu graafilise liidese joonistamise ja haldamisega - see moodustab suurema osa programmi koodist. Moodulist language olevad klassid, peamiselt CodeRunner, tegelevad koodi jooksutamisega.
+Monty lï¿½htekood on jaotatud kahte moodulisse. Moodul gui tegeleb kogu graafilise liidese joonistamise ja haldamisega - see moodustab suurema osa programmi koodist. Moodulist language olevad klassid, peamiselt CodeRunner, tegelevad koodi jooksutamisega.
 
-Koodi lugemist võib alustada klassist gui/blocks.py - seal on defineeritud kõik kasutatavad klotsid ning nende väljastatav kood. Graafilist liidest haldav kood on gui/monty.py-s, erinevad graafilised objektid ja nendega seotud meetodid on vastava nimega kastides. Failis CodeBox.py on kood, mille abil genereeritakse ja joonistatakse rakenduse parempoolses ribas olev programmi kood ja programmi väljund.
+Koodi lugemist vï¿½ib alustada klassist gui/blocks.py - seal on defineeritud kï¿½ik kasutatavad klotsid ning nende vï¿½ljastatav kood. Graafilist liidest haldav kood on gui/monty.py-s, erinevad graafilised objektid ja nendega seotud meetodid on vastava nimega kastides. Failis CodeBox.py on kood, mille abil genereeritakse ja joonistatakse rakenduse parempoolses ribas olev programmi kood ja programmi vï¿½ljund.
