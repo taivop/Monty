@@ -5,6 +5,8 @@ See Installation and Running in our wiki for quick-start instructions.
 
 Monty is a course project in MTAT.05.085 Automata, Languages and Compilers at University of Tartu.
 
-Authors: Anti Ingel, Taivo Pungas, Oliver Viljamaa.
+This work was supported by the Estonian IT Academy program:
+http://www.itakadeemia.ee/
 
-This work was supported by the IT Academy program.
+
+Authors: Anti Ingel, Taivo Pungas, Oliver Viljamaa.
