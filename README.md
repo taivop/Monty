@@ -5,7 +5,7 @@ Monty is a drag-and-drop programming interface for creating Python programs. Use
 See Installation and Running in our wiki for quick-start instructions.
 
 
-Monty is a course project in MTAT.05.085 Automata, Languages and Compilers at University of Tartu.
+Monty is a course project in MTAT.05.085 Automata, Languages and Compilers at University of Tartu. You can find the poster for this project [here](https://github.com/taivop/Monty/wiki/Plakat-tudengiprojektide-v%C3%B5istluse-jaoks here).
 
 This work was supported by the Estonian IT Academy program:
 http://www.itakadeemia.ee/
